@@ -9,7 +9,7 @@ public class KafkaMonitoring {
     
 	 public String sample()
 	    {
-		 System.out.println("hhhh");
+		 System.out.println("Kafka monitoring");
 	        LOGGER.debug("Debug Message Logged !!");
 	        LOGGER.info("Info Message Logged !!");
 	        LOGGER.debug("Another Debug Message !!");
