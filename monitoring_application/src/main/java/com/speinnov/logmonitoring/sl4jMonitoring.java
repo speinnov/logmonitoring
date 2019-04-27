@@ -1,6 +1,6 @@
 package com.speinnov.logmonitoring;
 /**
- * 
+ * *
  * Log4j will inspect the "log4j.configurationFile" system property and, if set, will attempt to load the configuration using the ConfigurationFactory that matches the file extension.
 If no system property is set the properties ConfigurationFactory will look for log4j2-test.properties in the classpath.
 If no such file is found the YAML ConfigurationFactory will look for log4j2-test.yaml or log4j2-test.yml in the classpath.
