@@ -27,11 +27,11 @@ public class sl4jMonitoring {
 		 public static void main(String[] args)
 		    {
 			 
-			 String[] names = {"clio","mazda","citroin","berlingo"};
+			 String[] names = {"clio","mazda","citroin","berlingo","Jeep","Simca"};
 			 for (int l = 0; l < names.length; l++) {
 				 
 			 
-			 System.out.format("********* VHECULE REF number: %s! \n", names[l]);
+			 System.out.format("********* VHECULE REF numbers: %s! \n", names[l]);
 			 LOGGER.info("Info Message Logged !!"+names[l]);
 			 }
 			 LOGGER.debug("Debug Message Logged !!");
