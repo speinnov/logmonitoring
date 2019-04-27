@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 public class sl4jMonitoring {
  
 // https://www.youtube.com/watch?v=M88sKbRDR8Y
+	//https://www.youtube.com/watch?v=LPT7v69guVY
 
 		 private static final Logger LOGGER = LogManager.getLogger(sl4jMonitoring.class.getName());
 	     
