@@ -35,6 +35,7 @@ public class sl4jMonitoring {
 			 System.out.format("********* VHECULE REF numbers: %s! \n", names[l]);
 			 LOGGER.info("Info Message Logged !!"+names[l]);
 			 }
+			 
 			 LOGGER.debug("Debug Message Logged !!");
 		        LOGGER.info("Info Message Logged !!");
 		        LOGGER.error("Another Debug Message !!");
