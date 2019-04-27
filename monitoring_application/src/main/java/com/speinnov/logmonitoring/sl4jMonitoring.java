@@ -19,18 +19,26 @@ import org.apache.logging.log4j.Logger;
 
 public class sl4jMonitoring {
  
-
+// https://www.youtube.com/watch?v=M88sKbRDR8Y
 
 		 private static final Logger LOGGER = LogManager.getLogger(sl4jMonitoring.class.getName());
 	     
 		    
 		 public static void main(String[] args)
 		    {
-			 System.out.println("********* HELLO ***********");
-		        LOGGER.debug("Debug Message Logged !!");
+			 
+			 String[] names = {"clio","mazda","citroin","berlingo"};
+			 for (int l = 0; l < names.length; l++) {
+				 
+			 
+			 System.out.format("********* VHECULE REF : %s! \n", names[l]);
+			 LOGGER.info("Info Message Logged !!"+names[l]);
+			 }
+			 LOGGER.debug("Debug Message Logged !!");
 		        LOGGER.info("Info Message Logged !!");
-		        LOGGER.debug("Another Debug Message !!");
+		        LOGGER.error("Another Debug Message !!");
 		    }
 	 
 
 }
+ 
