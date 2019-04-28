@@ -7,7 +7,7 @@ public class KafkaMonitoring {
 	private static final Logger LOGGER = LogManager.getLogger(sl4jMonitoring.class.getName());
     
     
-	 public String sample()
+	 public String Sample()
 	    {
 		 System.out.println("Kafka monitoring");
 	        LOGGER.debug("Debug Message Logged !!");
