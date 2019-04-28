@@ -21,6 +21,10 @@ public class sl4jMonitoring {
  
 // https://www.youtube.com/watch?v=M88sKbRDR8Y
 	//https://www.youtube.com/watch?v=LPT7v69guVY
+	
+	// nexus
+	//https://books.sonatype.com/m2eclipse-book/reference/repository-sect-repo-view.html
+	
 
 		 private static final Logger LOGGER = LogManager.getLogger(sl4jMonitoring.class.getName());
 	     

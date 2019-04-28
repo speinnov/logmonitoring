@@ -6,30 +6,110 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<junit.version>4.12</junit.version>
+  	<spring.version>5.1.6.RELEASE</spring.version>
+  	<log.api.version>2.11.2</log.api.version>
   </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    
+ 
+    <dependencies>
+     
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+         
+        <dependency>  
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+         
+        </dependency>
+        <!--  
+        <dependency>
+  <groupId>extDependency</groupId>
+  <artifactId>extDependency</artifactId>
+  <scope>system</scope>
+  <version>1.0</version>
+  <systemPath>${basedir}/Users/hadoop/java_lib/jdbc/hive-jdbc-2.1.1-standalone.jar</systemPath>
+</dependency>
+-->
+        <!--   
+        <dependency> 
+  			<groupId>extDependency</groupId>
+  			<artifactId>extDependency</artifactId>
+  			<scope>system</scope>
+  			<version>1.0</version>
+  			<systemPath>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/thirdparty/org/talend/ci.builder/6.4.1/ci.builder-6.4.1.jar</systemPath>
+			</dependency>
+			-->
+        <!--  
+         <dependency> 
+  			<groupId>extDependency</groupId>
+  			<artifactId>extDependency</artifactId>
+  			<scope>system</scope>
+  			<version>1.0</version>
+  			<systemPath>https://repo1.maven.org/maven2/spring/spring-core/1.0.2/spring-core-1.0.2.jar</systemPath>
+			</dependency>
+   
+    -->
      <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 		    <dependency>
 		        <groupId>org.apache.logging.log4j</groupId>
 		        <artifactId>log4j-api</artifactId>
-		        <version>2.11.2</version>
+		        <version>${log.api.version}</version>
 		    </dependency>
 		
 		    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		    <dependency>
 		        <groupId>org.apache.logging.log4j</groupId>
 		        <artifactId>log4j-core</artifactId>
-		        <version>2.11.2</version>
+		        <version>${log.api.version}</version>
 		    </dependency>
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.4.2.Final</version>
+</dependency>
 		
   </dependencies>
+  
+  
+   <repositories>
+       <repository>
+           <id>org.source.repo</id>
+           <name>Public online Restlet repository</name>
+           <url>http://repo.maven.apache.org/maven2/</url>
+       </repository>
+
+       <repository>
+           <id>talend_ci_builder</id>
+           <name>talend ci builder</name>
+           <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/thirdparty/</url>
+       </repository>
+       
+       <repository>
+          <id>codehausSnapshots</id>
+          <name>Codehaus Snapshots</name>
+          <releases>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
+          <url>http://snapshots.maven.codehaus.org/maven2</url>
+          <layout>default</layout>
+        </repository>
+
+   </repositories>
+   
+   
+   
   
 </project>
