@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+
+<!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5p %m%n</Property>
+        <Property name="APP_LOG_ROOT">/Users/hadoop/logs</Property>
+        <Property name="APPLICATION">JOBTALEND</Property>
+        <Property name="PROJECT_ROOT" value="${env:USER:-/default/path}" > </Property>
+        <Property name="PROJECT" value="$${env:JENKINS_HOME}" > </Property>
+       
+        
+    </Properties>
+     
+     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+ 
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+<appender name="reliable-kafka-appender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+ 
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <level>ERROR</level>
+    </filter>
+ 
+    <encoder>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+ 
+    <topic>reliable-logs</topic>
+    <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.HostNameKeyingStrategy" />
+    <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.BlockingDeliveryStrategy">
+        <timeout>0</timeout>
+    </deliveryStrategy>
+ 
+    <producerConfig>bootstrap.servers=localhost:9093</producerConfig>
+    <producerConfig>buffer.memory=8388608</producerConfig>
+ 
+    <producerConfig>metadata.fetch.timeout.ms=99999999999</producerConfig>
+    <producerConfig>client.id=${HOSTNAME}-${CONTEXT_NAME}-logback-restrictive</producerConfig>
+    <producerConfig>compression.type=gzip</producerConfig>
+ 
+    <appender-ref ref="STDERR"/>
+</appender>
+ 
+<root level="info">
+    <appender-ref ref="fast-kafka-appender" />
+    <appender-ref ref="reliable-kafka-appender" />
+    <appender-ref ref="STDOUT"/>
+</root>
+
+</Configuration>

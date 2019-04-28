@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn">
+<Configuration status="WARN" monitorInterval="30">
+ 
+    <!-- Logging Properties -->
     <Properties>
-        <Property name="basePath">/Users/hadoop/logs</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5p %m%n</Property>
+        <Property name="APP_LOG_ROOT">/Users/hadoop/logs</Property>
+        <Property name="APPLICATION">JOBTALEND</Property>
+        <Property name="PROJECT_ROOT" value="${env:USER:-/default/path}" > </Property>
+        <Property name="PROJECT" value="$${env:JENKINS_HOME}" > </Property>
+       
+        
     </Properties>
+     
     <Appenders>
-        <RollingFile name="fileLogger" fileName="${basePath}/app-info.html"
-                     filePattern="${basePath}/app-info-%d{yyyy-MM-dd}.html">
-            <HTMLLayout charset="UTF-8" title="Speinnov Info Logs" locationInfo="true" />
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10 MB" />
-            </Policies>
-        </RollingFile>
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout   pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+     
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+           		  <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t]  %-5level %logger{36} %msg%n" />
+                   
         </Console>
+        
+        <Kafka name="kafka" topic="kafkatopic1">
+      				<!--PatternLayout pattern="{date='%date'}, {message= '%message'},info= '%-5level'},{logger= '%logger{36}' },{detail= '%msg%n'}"/-->
+        			<PatternLayout pattern="%date %message"/>
+        			<!--Property name="bootstrap.servers">localhost:9093</Property-->
+        			<Property name="bootstrap.servers">localhost:9093</Property>
+    	</Kafka> 
+   
+  
     </Appenders>
+ 
     <Loggers>
-        <Logger name="com.speinnov.logmonitoring" level="debug" additivity="false">
-            <appender-ref ref="fileLogger" level="debug" />
-        </Logger>
-        <Root level="error" additivity="false">
-            <appender-ref ref="console" />
+     
+        <Logger name="org.apache.kafka"   level="error"/>
+            
+                 
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="kafka"/>
         </Root>
+ 
     </Loggers>
+ 
 </Configuration>

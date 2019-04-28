@@ -5,115 +5,47 @@
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5p %m%n</Property>
         <Property name="APP_LOG_ROOT">/Users/hadoop/logs</Property>
+        <Property name="APPLICATION">JOBTALEND</Property>
+        <Property name="PROJECT_ROOT" value="${env:USER:-/default/path}" > </Property>
+        <Property name="PROJECT" value="$${env:JENKINS_HOME}" > </Property>
+       
+        
     </Properties>
      
-    <Appenders>
-     
-        <!-- Console Appender -->
-        <Console name="Console" target="SYSTEM_OUT" follow="true">
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-        </Console>
-        
-         <!-- File Appenders on need basis -->
-         <RollingFile name="debugLog" fileName="${sys:APP_LOG_ROOT}/application-debug.log"
-            filePattern="${sys:APP_LOG_ROOT}/application-debug-%d{yyyy-MM-dd}-%i.log">
-            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="19500KB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-        
-        <!-- File Appenders on need basis -->
-        <RollingFile 
-        	name="frameworkLog" 
-        	fileName="${APP_LOG_ROOT}/app-framework.log"
-            filePattern="${APP_LOG_ROOT}/app-framework-%d{yyyy-MM-dd}-%i.log"
-            ignoreExceptions="false">
-            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-            	<OnStartupTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="19500KB" />
-                <TimeBasedTriggeringPolicy interval="1"/>
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-         
-        <RollingFile name="debugLog" fileName="${APP_LOG_ROOT}/app-debug.log"
-            filePattern="${APP_LOG_ROOT}/app-debug-%d{yyyy-MM-dd}-%i.log">
-            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="19500KB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-         
-        <RollingFile name="infoLog" fileName="${APP_LOG_ROOT}/app-info.log"
-            filePattern="${APP_LOG_ROOT}/app-info-%d{yyyy-MM-dd}-%i.log" >
-            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="19500KB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-         
-        <RollingFile name="errorLog" fileName="${APP_LOG_ROOT}/app-error.log"
-            filePattern="${APP_LOG_ROOT}/app-error-%d{yyyy-MM-dd}-%i.log" >
-            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="19500KB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-         
-        <RollingFile name="perfLog" fileName="${APP_LOG_ROOT}/app-perf.log"
-            filePattern="${APP_LOG_ROOT}/app-perf-%d{yyyy-MM-dd}-%i.log" >
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="19500KB" />
-            </Policies>
-            <DefaultRolloverStrategy max="1"/>
-        </RollingFile>
-         
-        <RollingFile name="traceLog" fileName="${APP_LOG_ROOT}/app-trace.log"
-            filePattern="${APP_LOG_ROOT}/app-trace-%d{yyyy-MM-dd}-%i.log" >
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="19500KB" />
-            </Policies>
-            <DefaultRolloverStrategy max="1"/>
-        </RollingFile>
-         
-    </Appenders>
+     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
  
-    <Loggers>
-     
-        <Logger name="com.speinnov.logmonitoring.sl4jMonitoring" additivity="false" level="trace">
-            <AppenderRef ref="traceLog" />
-            <AppenderRef ref="Console" />
-        </Logger>
-         
-        <Logger name="com.speinnov.logmonitoring" additivity="false" level="debug">
-            <AppenderRef ref="debugLog" />
-            <AppenderRef ref="infoLog"  />
-            <AppenderRef ref="errorLog" />
-            <AppenderRef ref="Console"  />
-        </Logger>
-         
-        <Logger name="com.speinnov" additivity="false" level="info">
-            <AppenderRef ref="perfLog" />
-            <AppenderRef ref="Console"/>
-        </Logger>
-                 
-        <Root level="warn">
-            <AppenderRef ref="Console"/>
-        </Root>
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
  
-    </Loggers>
+    <appender name="fast-kafka-appender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+ 
+        <topic>fast-logs</topic>
+        <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy" />
+        <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy" />
+ 
+        <producerConfig>bootstrap.servers=localhost:9093</producerConfig>
+        <producerConfig>acks=0</producerConfig>
+        <producerConfig>linger.ms=100</producerConfig>
+        <producerConfig>max.block.ms=100</producerConfig>
+        <producerConfig>client.id=${HOSTNAME}-${CONTEXT_NAME}-logback-relaxed</producerConfig>
+ 
+    </appender>
+ 
+    <root level="info">
+        <appender-ref ref="fast-kafka-appender" />
+        <appender-ref ref="STDOUT"/>
+    </root>
  
 </Configuration>

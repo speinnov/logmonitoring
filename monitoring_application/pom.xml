@@ -12,6 +12,31 @@
   </properties>
  
     <dependencies>
+    <!--  
+       <dependency>
+       <groupId>org.slf4j</groupId>
+       <artifactId>slf4j-api</artifactId>
+       <version>1.7.5</version>
+   </dependency>
+   -->
+   <dependency>
+       <groupId>org.slf4j</groupId>
+       <artifactId>slf4j-simple</artifactId>
+       <version>1.6.4</version>
+   </dependency>
+   <!--  
+      <dependency>
+       <groupId>org.slf4j</groupId>
+       <artifactId>slf4j-log4j12</artifactId>
+       <version>1.7.5</version>
+   </dependency>
+   -->
+     <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+		<dependency>
+		    <groupId>org.apache.kafka</groupId>
+		    <artifactId>kafka-clients</artifactId>
+		    <version>2.2.0</version>
+		</dependency>
      
         <dependency>
             <groupId>junit</groupId>
@@ -19,13 +44,14 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-         
+         <!--  
         <dependency>  
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
          
         </dependency>
+        -->
         <!--  
         <dependency>
   <groupId>extDependency</groupId>
@@ -73,9 +99,37 @@
     <artifactId>hibernate-core</artifactId>
     <version>5.4.2.Final</version>
 </dependency>
-		
+
+<!--  https://examples.javacodegeeks.com/enterprise-java/logback/logback-kafka-appender-example/ -->
+		<dependency>
+            <groupId>com.github.danielwegener</groupId>
+            <artifactId>logback-kafka-appender</artifactId>
+            <version>0.2.0-RC1</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+            <scope>runtime</scope>
+        </dependency>     
   </dependencies>
   
+  
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
   
    <repositories>
        <repository>
