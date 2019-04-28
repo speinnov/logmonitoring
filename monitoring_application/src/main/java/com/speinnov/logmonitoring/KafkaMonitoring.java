@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 public class KafkaMonitoring {
 	private static final Logger LOGGER = LogManager.getLogger(sl4jMonitoring.class.getName());
     
+	// merge request
+	//https://www.youtube.com/watch?v=9aO4xOlma_k
     
 	 public String Sample()
 	    {
