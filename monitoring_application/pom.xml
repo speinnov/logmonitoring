@@ -37,7 +37,25 @@
 		    <artifactId>kafka-clients</artifactId>
 		    <version>2.2.0</version>
 		</dependency>
-     
+ 
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-log4j-appender</artifactId>
+        <version>0.10.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>net.logstash.log4j</groupId>
+        <artifactId>jsonevent-layout</artifactId>
+        <version>1.7</version>
+    </dependency>
+    <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.2</version>
+    </dependency>
+    
+     <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+    
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
