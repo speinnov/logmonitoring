@@ -8,21 +8,42 @@ package com.speinnov.logmonitoring;
  * https://github.com/danielwegener/logback-kafka-appender
  * 
  * */
- */
+/* 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+*/
 import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+ 
 
 /**
  * Created by Thomas Hamm on 27.07.17.
  */
+
+
 public class JsonLayout extends Layout {
+ 
+	public void activateOptions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String format(LoggingEvent event) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean ignoresThrowable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+/*
     private final ObjectMapper om;
     private SimpleDateFormat dateFormat;
 
@@ -78,4 +99,5 @@ public class JsonLayout extends Layout {
             this.dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT_PATTERN);
         }
     }
+    */
 }
