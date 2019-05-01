@@ -15,7 +15,7 @@ public class App
 	//private static final Logger LOGGER = LogManager.getLogger(App.class.getName());
     public static void main( String[] args )
     {
-        //System.out.println( "Hello World!"+App.class.getName() );
+        System.out.println( "Hello World!" );
       //  LOGGER.debug("Debug Message Logged !!"+App.class.getName() );
       //  LOGGER.info("Info Message Logged !!"+App.class.getName() );
       //  LOGGER.error("Another Debug Message !!"+App.class.getName() );
