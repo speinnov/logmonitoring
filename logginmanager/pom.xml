@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.speinnov.tools.monitoring</groupId>
   <artifactId>logginmanager</artifactId>
-  <version>1.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <version>1.4</version>
 
   <name>logginmanager</name>
   <!-- FIXME change it to the project's website -->
@@ -32,7 +30,7 @@
 
 
 
-
+    
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -40,14 +38,34 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-
+  
+ <!--   
     <dependency>
        <groupId>org.slf4j</groupId>
        <artifactId>slf4j-api</artifactId>
        <version>1.7.5</version>
    </dependency>
+ -->
+ <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+ <!-- 
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-log4j12</artifactId>
+    <version>1.7.26</version>
+    <scope>test</scope>
+</dependency>
+ -->
+ <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>1.7.26</version>
+    <scope>test</scope>
+</dependency>
+ 
    <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
-		<dependency>
+   <!--
+   		<dependency>
 		    <groupId>org.apache.kafka</groupId>
 		    <artifactId>kafka-clients</artifactId>
 		    <version>2.2.0</version>
@@ -62,20 +80,24 @@
         <artifactId>jsonevent-layout</artifactId>
         <version>1.7</version>
     </dependency>
+
     <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
         <version>1.2</version>
     </dependency>
-
+-->
     <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+    <!--
 		    <dependency>
 		        <groupId>org.apache.logging.log4j</groupId>
 		        <artifactId>log4j-api</artifactId>
 		        <version>${log.api.version}</version>
 		    </dependency>
+		    -->
 
 		    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		    <!--
 		    <dependency>
 		        <groupId>org.apache.logging.log4j</groupId>
 		        <artifactId>log4j-core</artifactId>
@@ -88,14 +110,15 @@
             <version>0.2.0-RC1</version>
             <scope>runtime</scope>
         </dependency>
-
+        -->
+<!--
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
             <scope>runtime</scope>
         </dependency>
-
+-->
   </dependencies>
 
   <build>
@@ -147,7 +170,7 @@
                     <id>default-deploy</id>
                     <phase>deploy</phase>
                     <goals>
-                       <goal>deploy</goal>
+                       <goal>deploy-file</goal>
                     </goals>
                  </execution>
               </executions>
@@ -226,6 +249,8 @@
   <scm>
       <connection>scm:git:https://github.com/speinnov/logmonitoring.git</connection>
       <developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection>
+      <url>https://github.com/speinnov/logmonitoring.git</url>
+      <tag>logginmanager-1.4</tag>
   </scm>
 
   <!--
@@ -359,7 +384,7 @@
         </repository>
       -->
       <!--
-      <snapshotRepository/>
+      <snapshotRepository />
         <repository>
 
           <id>talend-snapshots</id>
@@ -373,7 +398,7 @@
                     <enabled>true</enabled>
                 </snapshots>
         </repository>
-        <snapshotRepository/>
+        <snapshotRepository />
 
 
 
@@ -438,4 +463,5 @@
 
 
 
+  <description>test deployment on Nexus</description>
 </project>
