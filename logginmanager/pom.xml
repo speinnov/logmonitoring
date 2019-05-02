@@ -5,7 +5,7 @@
 
   <groupId>com.speinnov.tools.monitoring</groupId>
   <artifactId>logginmanager</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.5-SNAPSHOT</version>
 
   <name>logginmanager</name>
   <!-- FIXME change it to the project's website -->
@@ -250,14 +250,15 @@
   </build>
 
   <scm>
-      <connection>scm:git:https://${env.GIT_USERNAME}:${env.GIT_PASSWORD}@github.com/speinnov/logmonitoring.git</connection>
+      <connection>scm:git:https://github.com/speinnov/logmonitoring.git</connection>
       <!--developerConnection>
            scm:git:https://github.com/speinnov/logmonitoring.git
       </developerConnection-->
       <url>
-          https://github.com/speinnov/logmonitoring/tree/master/logginmanager
+          https://github.com/speinnov/logmonitoring.git
       </url>
-      <tag>HEAD</tag>
+      <tag>1.0</tag>
+    <developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection>
   </scm>
 
   <!--
