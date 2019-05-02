@@ -5,7 +5,7 @@
 
   <groupId>com.speinnov.tools.monitoring</groupId>
   <artifactId>logginmanager</artifactId>
-  <version>1.4</version>
+  <version>1.2-SNAPSHOT</version>
 
   <name>logginmanager</name>
   <!-- FIXME change it to the project's website -->
