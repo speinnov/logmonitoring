@@ -248,8 +248,12 @@
 
   <scm>
       <connection>scm:git:https://github.com/speinnov/logmonitoring.git</connection>
-      <developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection>
-      <url>https://github.com/speinnov/logmonitoring.git</url>
+      <developerConnection>
+           scm:git:https://github.com/speinnov/logmonitoring.git
+      </developerConnection>
+      <url>
+          https://github.com/speinnov/logmonitoring/tree/master/logginmanager
+      </url>
       <tag>logginmanager-1.4</tag>
   </scm>
 
