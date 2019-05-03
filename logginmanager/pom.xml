@@ -25,6 +25,9 @@
     <artifact.packaging>jar</artifact.packaging>
     <artifact.fileName>logginmanager</artifact.fileName>
   -->
+
+  <GIT_USERNAME>akhenouche@spectrum-innovation.com</GIT_USERNAME>
+  <GIT_PASSWORD>Spark2017</GIT_PASSWORD>
   </properties>
 
 
@@ -249,16 +252,19 @@
     </pluginManagement>
   </build>
 
+  <!--connection>scm:git:http://${GIT_USERNAME}:${GIT_PASSWORD}@server.host.name/path/to/project.git</connection-->
+
+
   <scm>
-      <connection>scm:git:https://github.com/speinnov/logmonitoring.git</connection>
+      <connection>scm:git:https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/speinnov/logmonitoring.git</connection>
       <!--developerConnection>
            scm:git:https://github.com/speinnov/logmonitoring.git
       </developerConnection-->
       <url>
           https://github.com/speinnov/logmonitoring.git
       </url>
-      <tag>1.0</tag>
-    <developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection>
+      <tag>HEAD</tag>
+    <!--developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection-->
   </scm>
 
   <!--
