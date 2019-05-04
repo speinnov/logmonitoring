@@ -235,10 +235,10 @@
                             <phase>deploy</phase>
                             <configuration>
                                  <repositoryid>${project.distributionManagementArtifactRepository.id}</repositoryid>
-                                  
+                                  <!--
                                  <file>${project.build.directory}/${project.build.finalName}-noauth.${project.packaging}</file>
                                  <url>${project.distributionManagementArtifactRepository.url}</url>
-
+-->
                                  <artifactid>${project.artifactId}-noauth</artifactid>
                                  <groupid>${project.groupId}</groupid>
                                  <version>${project.version}</version>
