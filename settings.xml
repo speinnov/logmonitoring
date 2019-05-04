@@ -168,9 +168,16 @@ under the License.
             </server>
             <server>
                   <username>admin</username>
-                  <password></password>
+                  <password>Talend123</password>
                   <id>talend-snapshots</id>
             </server>
+
+            <server>
+                  <username>admin</username>
+                  <password>Talend123</password>
+                  <id>deploy-node-modules-artifact</id>
+            </server>
+
             <server>
               <username>admin</username>
               <password>Talend123</password>
