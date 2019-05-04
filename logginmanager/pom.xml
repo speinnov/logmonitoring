@@ -10,7 +10,7 @@
   <name>logginmanager</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
-  <repositoryId>talend_releases</repositoryId>
+
 
   <!-- =============================================================== -->
   <!-- Propriétés -->
@@ -42,6 +42,7 @@
     <!-- Propriété servant à contourner le bug du non remplacement
          de la propriété maven.build.timestamp lors du filtrage des ressources -->
     <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
+    <repositoryId>talend_releases</repositoryId>
   </properties>
 
 
