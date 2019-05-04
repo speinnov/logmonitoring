@@ -32,16 +32,20 @@
 
     <GIT_USERNAME>akhenouche@spectrum-innovation.com</GIT_USERNAME>
     <GIT_PASSWORD>Spark2017</GIT_PASSWORD>
+    <!--
     <baseNexusURL>${baseNexusURL}</baseNexusURL>
+  -->
     <targetRepositoryID>${repositoryId}</targetRepositoryID>
     <package.final.name>${project.artifactId}</package.final.name>
     <!-- Le nom "public" de l'application -->
     <application.name>${project.artifactId}</application.name>
+
     <!-- Le format à utiliser pour afficher la date du build -->
     <maven.build.timestamp.format>dd/MM/yyyy</maven.build.timestamp.format>
     <!-- Propriété servant à contourner le bug du non remplacement
          de la propriété maven.build.timestamp lors du filtrage des ressources -->
     <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
+   
     <repositoryId>talend_releases</repositoryId>
   </properties>
 
