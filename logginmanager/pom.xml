@@ -6,7 +6,7 @@
   <groupId>com.speinnov.tools.monitoring</groupId>
   <artifactId>logginmanager</artifactId>
   <version>1.5-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>logginmanager</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
@@ -45,7 +45,7 @@
     <!-- Propriété servant à contourner le bug du non remplacement
          de la propriété maven.build.timestamp lors du filtrage des ressources -->
     <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
-   
+
     <repositoryId>talend_releases</repositoryId>
   </properties>
 
@@ -192,7 +192,7 @@
                     <id>default-deploy</id>
                     <phase>deploy</phase>
                     <goals>
-                       <goal>deploy-file</goal>
+                       <goal>deploy</goal>
                     </goals>
                  </execution>
               </executions>
