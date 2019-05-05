@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exportParameters version="6.4.1.20170623_1246">
+    <exportParameter name="DEV" type="technicalStatus">development</exportParameter>
+    <exportParameter name="TEST" type="technicalStatus">testing</exportParameter>
+    <exportParameter name="PROD" type="technicalStatus">production</exportParameter>
+    <exportParameter name="UCK" type="documentationStatus">unchecked</exportParameter>
+    <exportParameter name="CHK" type="documentationStatus">checked</exportParameter>
+    <exportParameter name="VAL" type="documentationStatus">validated</exportParameter>
+    <exportParameter name="hidePassword" type="security">true</exportParameter>
+</exportParameters>
