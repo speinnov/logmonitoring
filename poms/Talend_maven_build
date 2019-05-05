@@ -1,0 +1,158 @@
+export ANSIBLE_HOSTS=~/ansible/hosts
+export JENKINS_HOME=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME
+export JENKINS_PORT=9090
+
+
+
+
+jenkins.model.JenkinsLocationConfiguration.xml
+port 9090
+
+
+down vote
+In CentOS/RedHat
+
+vim /etc/sysconfig/jenkins
+
+# Port Jenkins is listening on.
+# Set to -1 to disable
+#
+JENKINS_PORT="8080"
+
+
+
+java -jar jenkins.war --help
+java -jar jenkins.war --httpPort=9090
+
+java -DJENKINS_HOME=/Users/Heros/jenkins -jar jenkins.war  --httpPort=8484
+
+ there is a the JENKINS_PORT variable that holds the port number on which Jenkins is running.
+
+ for windows
+ Change the port number as below: <arguments>-Xrs -Xmx256m -Dhudson.lifecycle=hudson.lifecycle.WindowsServiceLifecycle -jar "%BASE%\jenkins.war" --httpPort=9090</arguments>
+
+
+ DAEMON_ARGS in the file /etc/init.d/jenkins
+
+HTTP_PORT=8010 
+JENKINS_ARGS="--httpPort=$HTTP_PORT"
+
+
+
+for MAC
+On OSX edit file:
+
+/usr/local/Cellar/jenkins-lts/2.46.1/homebrew.mxcl.jenkins-lts.plist
+
+hange the '/etc/init.d/jenkins' shell
+
+check_tcp_port "http" "$HTTP_PORT" "8080" || return 1
+Change 8080 to whichever you want
+
+******
+
+Talend_maven_build
+
+C:\Program Files (x86)\Talend-Studio\studio\Talend-Studio-win-x86_64" -nosplash -application org.talend.commandline.CommandLine -consoleLog -data "C:\EDS\bamboo-agen
+t-home\xml-data\build-dir\EDS-TCEB-JOB1\Talend-projects" startServer -p 8002
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa  -nosplash -application org.talend.commandline.CommandLine 
+-data /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects/CICD_JOB 
+startServer -p 8002   -vmargs -Djava.awt.headless=true  -Dawt.toolkit=sun.awt.HToolkit  -Xms64m -Xmx1024m -XstartOnFirstThread   -Dorg.eclipse.swt.internal.carbon.smallFonts
+
+
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa  -nosplash -application org.talend.commandline.CommandLine -consoleLog-data /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects/CICD_JOB startServer -p 8002   
+
+-vmargs -Djava.awt.headless=true  -Dawt.toolkit=sun.awt.HToolkit  -Xms64m -Xmx1024m -XstartOnFirstThread   -Dorg.eclipse.swt.internal.carbon.smallFonts
+*********
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa  -nosplash -application org.talend.commandline.CommandLine -consoleLog -data /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects/CICD_JOB startServer -p 8002 
+
+
+
+
+Thanks for the response. I did make sure I use the same workspace when I run the commandline. 
+
+1. Started commandline using: 
+
+C:\>"C:\Program Files (x86)\Talend-Studio\studio\Talend-Studio-win-x86_64" -nosplash -application org.talend.commandline.CommandLine -consoleLog -data "C:\EDS\bamboo-agen
+t-home\xml-data\build-dir\EDS-TCEB-JOB1\Talend-projects" startServer -p 8002
+
+
+2. In a different command line window, ran the below command to generate talend project code. 
+
+ 
+
+C:\>mvn org.talend:ci.builder:6.3.1:generate -X -Dcommandline.workspace="C:\EDS\bamboo-agent-home\xml-data\build-dir\EDS-TCEB-JOB1\Talend-projects" -Dcommandline.host=localhost -Dcommandline.port=8002 -Dcommandline.user=<user> -DprojectsTargetDirectory=.\BuildSources
+
+ 
+ mvn  -Dcommandline.workspace="/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects/CICD_JOB" -Dcommandline.host=macbookprobigdata.local -Dcommandline.port=8002 -Dcommandline.user=jobbuilder@talend.com -DprojectsTargetDirectory=./BuildSources org.talend:ci.builder:6.4.1:generate -X
+
+
+
+ mvn  -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_remote_pom.xml -s /Applications/CommandLine641/configuration/maven_user_settings.xml  -Ddeploy.version=1.0.0-SNAPSHOT  -DitemFilter="(type=process)and(label=cicd_talend_main)" -Dcommandline.workspace="/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects/" -Dcommandline.host=macbookprobigdata.local -Dcommandline.port=8002 -Dcommandline.user=jobbuilder@talend.com -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/BuildSources org.talend:ci.builder:6.4.1:generate -X
+
+ "-D-Djvm.arguments=-ea -Xms512m -Dfile.encoding=UTF-8 -Xmx2000m -XX:+CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError" 
+
+ -Dcommandline.user=jobbuilder@talend.com 
+ -Dcommandline.port=8002 
+ -Dcommandline.host=macbookprobigdata.local 
+ -DitemFilter=(type=process)and(label=cicd_talend_main) 
+
+
+clean ${mygoals} -fn -e
+generate-sources
+compile
+test
+package
+install
+deploy
+
+eba704fadee64ed1a854ad2214c1fa54
+
+ -Ddeploy.version=1.0.0-SNAPSHOT  \
+
+
+
+mvn clean generate-sources -fn -e  org.talend:ci.builder:6.4.1:generate -X \
+ -Dcommandline.workspace="/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/commandline_workspace/" \
+ -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_remote_pom.xml \
+  -s /Applications/CommandLine641/configuration/maven_user_settings.xml  \
+ -Dcommandline.host=macbookprobigdata.local \
+ -Dcommandline.port=8002 \
+ -Dcommandline.user=jobbuilder@talend.com \
+ -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/BuildSources \
+ -DitemFilter="(type=process)and(label=/job/process/cicd_talend_main)" 
+
+************
+-DaltDeploymentRepository=snapshots::default::http://macbookprobigdata.local:8181/nexus/content/repositories/maven-snapshots/
+-DaltDeploymentRepository=releases::default::http://macbookprobigdata.local:8181/nexus/content/repositories/maven-releases/
+
+*************
+
+ /usr/local/Cellar/maven/3.5.3/libexec/bin/mvn 
+ -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_remote_pom.xml 
+
+ -s /Applications/CommandLine641/configuration/maven_user_settings.xml 
+
+ -D-Ddeploy.version=1.0.0-SNAPSHOT 
+ -D-DlauncherPath=${product.path}/plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar 
+
+ "-D-Djvm.arguments=-ea -Xms512m -Dfile.encoding=UTF-8 -Xmx2000m -XX:+CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError" 
+
+ -D-Dcommandline.user=jobbuilder@talend.com 
+ -D-Dcommandline.port=8002 
+ -D-Dcommandline.host=macbookprobigdata.local 
+ -D-DitemFilter=(type=process)and(label=cicd_talend_main) 
+
+ <settings>
+        <localRepository>/Applications/CommandLine641/configuration/.m2/repository/</localRepository>
+        <servers>
+                <server>
+                        <id>tac</id>
+                        <username>admin</username>
+                        <password>Talend123</password>
+                </server>
+        </servers>
+</settings>
