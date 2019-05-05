@@ -1,0 +1,669 @@
+https://github.com/Talend
+
+https://medium.com/@Talend/going-serverless-with-talend-through-ci-cd-and-containers-e4852a0fb57b
+
+
+
+cat /var/lib/jenkins/hudson.tasks.Maven.xml
+
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.tasks.Maven_-DescriptorImpl>
+  <installations>
+    <hudson.tasks.Maven_-MavenInstallation>
+      <name>MAVEN3</name>
+      <home>/usr/share/apache-maven/</home>
+      <properties/>
+    </hudson.tasks.Maven_-MavenInstallation>
+  </installations>
+</hudson.tasks.Maven_-DescriptorImpl>
+
+==>. mvnHome = tool 'MAVEN3'
+
+withMaven(jdk: '<JDK name>', maven: '<maven name>') {
+  sh 'mvn clean install'
+  }
+
+
+node {
+   def mvnHome
+   stage('Preparation') {
+      git url: 'https://github.com/prayagupd/eccount-rest.git', branch: 'REST-API-load-balancing'
+      mvnHome = tool 'MAVEN3'
+   }
+   stage('Build') {
+      sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+   }
+   stage('Results') {
+      junit '**/target/surefire-reports/TEST-*.xml'
+      archive 'target/*.jar'
+   }
+}
+
+
+==>.  withMaven(
+
+
+tage("checkout git") {
+   // .....
+}
+
+stage("build app") {
+  node {
+    withMaven(maven:'Maven_3_3_9', mavenLocalRepo: '.repository',mavenSettingsConfig:'my-config') {
+      sh 'mvn clean install'
+  }
+}
+
+stage("deploy app") {
+   node {
+     withMaven(maven:'Maven_3_3_9', mavenLocalRepo: '.repository',mavenSettingsConfig:'my-config') {
+       sh 'mvn deploy'
+   }
+}
+
+
+env.PROJECT_GIT_NAME = 'TALEND_JOB_PIPELINE'
+env.PROJECT_NAME = env.PROJECT_GIT_NAME.toLowerCase()
+env.JOB = 'test'
+env.VERSION = '0.1'
+env.GIT_URL = 'https://github.com/tgourdel/talend-pipeline-job.git'
+env.TYPE = "" // if big data = _mr
+env.DOCKERHUB_USER = "talendinc"
+
+//https://github.com/Talend/tmk-tech-blogs/blob/master/serverless-blog/pipeline.groovy
+// Credentials IDs (Manage Jenkins => Credentials)
+env.GIT_CREDENTIALS_ID = 'github'
+
+node {
+ 	// Clean workspace before doing anything
+    try {
+        def userInput
+        def deployprod
+        stage('Initialize') {
+            sh '''
+                echo "PATH = ${PATH}"
+                echo "M2_HOME = ${M2_HOME}"
+            ''' 
+        }
+        stage ('Git Checkout') {
+            git(
+                url: "${GIT_URL}",
+                credentialsId: "${GIT_CREDENTIALS_ID}",
+                branch: 'master'
+            )       
+            mvnHome = tool 'M3'
+        }
+        stage ('Build, Test and Publish Jobs to Nexus') {
+                    withMaven(
+                            // Maven installation declared in the Jenkins "Global Tool Configuration"
+                            maven: 'M3',
+                            // Maven settings.xml file defined with the Jenkins Config File Provider Plugin
+                            // Maven settings and global settings can also be defined in Jenkins Global Tools Configuration
+                            mavenSettingsConfig: 'maven-file',
+                            mavenOpts: '-Dproduct.path=/cmdline -DgenerationType=local -DaltDeploymentRepository=snapshots::default::http://nexus:8081/repository/snapshots/ -Xms1024m -Xmx3096m') 
+                            {
+                    
+                        // Run the maven build
+                        sh "mvn -f $PROJECT_GIT_NAME/poms/pom.xml clean deploy -fn -e -pl jobs/process${TYPE}/${JOB}_${VERSION} -am"
+                    
+                        }    
+        }
+      	stage ('Package Jobs as Container') {
+        			withMaven(
+        					// Maven installation declared in the Jenkins "Global Tool Configuration"
+        					maven: 'M3',
+        					// Maven settings.xml file defined with the Jenkins Config File Provider Plugin
+        					// Maven settings and global settings can also be defined in Jenkins Global Tools Configuration
+        					mavenSettingsConfig: 'maven-file',
+        					mavenOpts: '-Dproduct.path=/cmdline -DgenerationType=local -DaltDeploymentRepository=snapshots::default::http://nexus:8081/repository/snapshots/ -Xms1024m -Xmx3096m') 
+        					{
+        			
+        				// Run the maven build
+        				sh "mvn -f $PROJECT_GIT_NAME/poms/pom.xml -Pdocker package -fn -e -pl jobs/process${TYPE}/${JOB}_${VERSION}"
+        			
+        				} 
+      	}
+        stage ('Push to a Registry') {
+
+            withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+               sh 'docker tag $PROJECT_NAME/$JOB:$VERSION $DOCKERHUB_USER/$JOB:$VERSION'
+               sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+               sh "docker push $DOCKERHUB_USER/$JOB:$VERSION"
+
+           }
+        }
+        stage ('Deployment environment ?') {
+          userInput = input(id: 'userInput',    
+                                  message: 'Deployment environment',    
+                                  parameters: [
+                                    [$class: 'ChoiceParameterDefinition', choices: "AWS Fargate\nAzure ACI", name: 'Env']
+                                         ]  
+                )
+        }
+        stage ('Serverless deployment') {
+
+            if (userInput == "AWS Fargate"){
+                sh "echo 'AWS Fargate'"
+                
+                withCredentials([usernamePassword(credentialsId: 'AWS', usernameVariable: 'ACCESS_KEY_ID', passwordVariable: 'SECRET_ACCESS_KEY')]) {
+                    withDockerContainer('aws-cli') {
+
+                        sh"""
+                        aws configure set aws_access_key_id ${env.ACCESS_KEY_ID}
+                        aws configure set aws_secret_access_key ${env.SECRET_ACCESS_KEY}
+                        aws configure set default.region us-east-1
+                        aws ecs run-task --cluster TalendDeployedPipeline --task-definition TalendContainerizedJob --network-configuration awsvpcConfiguration={subnets=[subnet-6b30d745],securityGroups=[],assignPublicIp=ENABLED} --launch-type FARGATE
+                        """
+                    }
+                }
+            }
+            else if (userInput == "Azure ACI"){
+                sh "echo 'Azure ACI'"
+                
+                withCredentials([usernamePassword(credentialsId: 'azure', usernameVariable: 'username', passwordVariable: 'password')]) {
+                    withDockerContainer('azure-cli') {
+
+                        def now = System.currentTimeMillis()    
+
+                        sh"""
+                        az login -u ${env.username} -p ${env.password}
+                        az container create --resource-group talend-job-serverless --name talendjob${now} --image talendinc/job:0.1  --restart-policy OnFailure
+                        """
+                    }
+                }
+                
+            }
+            else {
+                  sh "echo 'nothing'"
+            }
+ 
+        }
+    } catch (err) {
+        currentBuild.result = 'FAILED'
+        throw err
+    }
+}
+
+
+
+maven xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <localRepository>/cmdline/configuration/.m2/repository</localRepository>
+  <servers>
+    <server>
+      <username>admin</username>
+      <password>admin123</password>
+      <id>releases</id>
+    </server>
+    <server>
+      <username>admin</username>
+      <password>admin123</password>
+      <id>snapshots</id>
+    </server>
+    <server>
+      <username>admin</username>
+      <password>admin123</password>
+      <id>talend-custom-libs-release</id>
+    </server>
+    <server>
+      <username>admin</username>
+      <password>admin123</password>
+      <id>talend-custom-libs-snapshot</id>
+    </server>
+    <server>
+      <username>admin</username>
+      <password>admin123</password>
+      <id>central</id>
+    </server>
+    <server>
+      <username>admin</username>
+      <password>admin123</password>
+      <id>thirdparty</id>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <name>central</name>
+          <url>http://nexus:8081/repository/maven-central/</url>
+        </repository>
+        <repository>
+          <releases />
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>talend-custom-libs-release</id>
+          <name>talend-custom-libs-release</name>
+          <url>http://nexus:8081/repository/talend-custom-libs-release</url>
+        </repository>
+        <repository>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots />
+          <id>talend-custom-libs-snapshot</id>
+          <name>talend-custom-libs-snapshot</name>
+          <url>http://nexus:8081/repository/talend-custom-libs-snapshot</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <name>central</name>
+          <url>http://nexus:8081/repository/maven-central/</url>
+        </pluginRepository>
+        <pluginRepository>
+          <id>thirdparty</id>
+          <name>thirdparty</name>
+          <url>http://nexus:8081/repository/talend-custom-libs-release</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>talend-ci</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>talend-ci</activeProfile>
+  </activeProfiles>
+</settings>
+
+
+
+
+
+
+project.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>@ProjectGroupId@</groupId>
+    <artifactId>@ProjectArtifactId@</artifactId>
+    <version>@ProjectVersion@</version>
+    <packaging>pom</packaging>
+    <name>@ProjectName@ Codes Master</name>
+    <url>http://www.talend.org/</url>
+    <properties>
+        <encoding>UTF-8</encoding>
+    </properties>
+    <profiles>
+            <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            </profile>
+    </profiles>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.6.1</version>
+                    <configuration>
+                        <source>@JavaVersion@</source>
+                        <target>@JavaVersion@</target>
+                        <compilerId>jdt</compilerId>
+                    </configuration>
+                    <dependencies>
+                        <!-- This dependency provides the implementation of compiler "jdt": -->
+                        <dependency>
+                            <groupId>org.eclipse.tycho</groupId>
+                            <artifactId>tycho-compiler-jdt</artifactId>
+                            <version>1.0.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.20</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
+
+
+
+
+
+
+standalone-job.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>@ProjectGroupId@</groupId>
+        <artifactId>@ProjectArtifactId@</artifactId>
+        <version>@ProjectVersion@</version>
+        <relativePath>@ProjectRelativePath@</relativePath>
+    </parent>
+    <groupId>@JobGroupId@</groupId>
+    <artifactId>@JobArtifactId@</artifactId>
+    <version>@JobVersion@</version>
+    <name>@ProjectName@ @JobName@-@JobVersion@ (@TalendJobVersion@,@JobType@)</name>
+    <properties>
+        <talend.job.path>@JobPath@</talend.job.path>
+        <!-- for jobInfo.properties -->
+        <maven.build.timestamp.format>@JobDateFormat@</maven.build.timestamp.format>
+        <talend.project.name>@ProjectName@</talend.project.name>
+        <talend.project.name.lowercase>@ProjectName@</talend.project.name.lowercase>
+        <talend.routine.groupid>@RoutineGroupId@</talend.routine.groupid>
+        <talend.pigudf.groupid>@PigudfGroupId@</talend.pigudf.groupid>
+        <talend.project.id>@ProjectId@</talend.project.id>
+        <talend.project.branch>@ProjectBranch@</talend.project.branch>
+        <talend.job.name>@JobName@</talend.job.name>
+        <talend.job.version>@TalendJobVersion@</talend.job.version>
+        <talend.job.date>${maven.build.timestamp}</talend.job.date>
+        <talend.job.context>@JobContext@</talend.job.context>
+        <talend.job.id>@JobId@</talend.job.id>
+        <talend.job.type>@JobType@</talend.job.type>
+        <talend.job.framework>@Framework@</talend.job.framework>
+        <talend.job.stat>@JobStat@</talend.job.stat>
+        <talend.job.applyContextToChildren>@JobApplyContextToChildren@</talend.job.applyContextToChildren>
+        <talend.product.version>@ProductVersion@</talend.product.version>
+        <talend.job.finalName>@JobFinalName@</talend.job.finalName>
+        <!-- for global properties -->
+        <current.int-resources.dir>${basedir}/src/main/resources</current.int-resources.dir>
+        <output.resources.dir>${talend.job.name}/src/main/resources</output.resources.dir>
+        <current.resources.dir>${basedir}/src/main/ext-resources</current.resources.dir>
+        <current.bundle.resources.dir>${basedir}/src/main/bundle-resources</current.bundle.resources.dir>
+        <current.test.resources.dir>${basedir}/src/test/resources</current.test.resources.dir>
+    </properties>
+    <dependencies>
+        <!-- Add some dependencies jars -->
+    </dependencies>
+    <build>
+        <finalName>${talend.job.finalName}</finalName>
+    </build>
+    <profiles>
+        <profile>
+            <id>packaging-and-assembly</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>${basedir}/src/main/assemblies/assembly.xml</descriptor>
+                                    </descriptors>
+                                    <tarLongFileMode>gnu</tarLongFileMode>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <finalName>${talend.job.finalName}</finalName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>default-settings</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- by default, all excluded, fixing that when "include-libs" profile 
+                    is not active, export the libraries always. -->
+                <talend.libraries.excludes.set>*:*</talend.libraries.excludes.set>
+                <talend.jobs.excludes.set>*:*</talend.jobs.excludes.set>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-java-sources</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sourcecodes.dir>${project.build.sourceDirectory}</sourcecodes.dir>
+                <resources.dir>${current.resources.dir}/</resources.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-maven-resources</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <templates.dir>${basedir}/src/main/templates/</templates.dir>
+                <assemblies.dir>${basedir}/src/main/assemblies/</assemblies.dir>
+                <poms.dir>${basedir}</poms.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-items</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <items.dir>${basedir}/src/main/items/${project.build.finalName}</items.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-libs</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <talend.libraries.excludes.set>${talend.libraries.includes.set}</talend.libraries.excludes.set>
+                <talend.jobs.excludes.set>${project.groupId}:*</talend.jobs.excludes.set>
+                <talend.code.excludes.set>org.talend.code.${talend.project.name.lowercase}:*</talend.code.excludes.set>
+                <talend.pigudf.excludes.set>org.talend.pigudf.${talend.project.name.lowercase}:*</talend.pigudf.excludes.set>
+                <talend.libraries.includes.set>org.talend.libraries:*</talend.libraries.includes.set>
+                <current.job.binaries.include>${project.groupId}:${project.artifactId}:${project.version}</current.job.binaries.include>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-binaries</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <jobs.binaries.includes.set>${project.groupId}:*</jobs.binaries.includes.set>
+                <routines.binaries.includes.set>${talend.routine.groupid}:*</routines.binaries.includes.set>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-xmlMappings</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <xmlMappings.resources.dir>${current.resources.dir}/xmlMappings/</xmlMappings.resources.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-running-xmlMappings</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <xmlMappings.running.dir>
+                    ${current.resources.dir}/xmlMappings/
+                </xmlMappings.running.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-rules</id>
+            <properties>
+                <rules.resources.dir>${current.resources.dir}/rules/</rules.resources.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-log4j</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <log4j.resources.dir>${current.resources.dir}/</log4j.resources.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-running-log4j</id>
+            <properties>
+                <log4j.running.dir>${current.resources.dir}/</log4j.running.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-contexts</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <contexts.running.dir>${current.resources.dir}/</contexts.running.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-test-sources</id>
+            <properties>
+                <test.sourcecodes.dir>${project.build.testSourceDirectory}</test.sourcecodes.dir>
+                <test.resources.dir>${basedir}/src/test/resources/</test.resources.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-test-reports</id>
+            <properties>
+                <test.reports.dir>${project.build.directory}/surefire-reports</test.reports.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-pigudfs-binaries</id>
+            <properties>
+                <pigudfs.binaries.includes.set>${talend.pigudf.groupid}:*</pigudfs.binaries.includes.set>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-microservice-configs</id>
+            <properties>
+                <microservice.configs.dir>${current.resources.dir}/</microservice.configs.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-microservice-running-configs</id>
+            <properties>
+                <microservice.running.configs.dir>${current.int-resources.dir}/</microservice.running.configs.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>include-survivorship-rules</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <survivorship.rules.dir>${current.resources.dir}/metadata/survivorship/</survivorship.rules.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>fabric8-maven-plugin</artifactId>
+                        <version>3.5.37</version>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <configuration>
+                                    <autoPull>once</autoPull>
+                                    <images>
+                                        <image>
+                                            <name>${talend.project.name.lowercase}/${talend.job.name}</name>
+                                            <build>
+                                                <from>openjdk:8-jre-slim</from>
+                                                <labels>
+                                                    <talend.project.name>${talend.project.name}</talend.project.name>
+                                                    <talend.project.name.lowercase>${talend.project.name.lowercase}</talend.project.name.lowercase>
+                                                    <talend.routine.groupid>${talend.routine.groupid}</talend.routine.groupid>
+                                                    <talend.pigudf.groupid>${talend.pigudf.groupid}</talend.pigudf.groupid>
+                                                    <talend.project.id>${talend.project.id}</talend.project.id>
+                                                    <talend.project.branch>${talend.project.branch}</talend.project.branch>
+                                                    <talend.job.name>${talend.job.name}</talend.job.name>
+                                                    <talend.job.version>${talend.job.version}</talend.job.version>
+                                                    <talend.job.date>${talend.job.date}</talend.job.date>
+                                                    <talend.job.context>${talend.job.context}</talend.job.context>
+                                                    <talend.job.id>${talend.job.id}</talend.job.id>
+                                                    <talend.job.type>${talend.job.type}</talend.job.type>
+                                                    <talend.job.stat>${talend.job.stat}</talend.job.stat>
+                                                    <talend.job.applyContextToChildren>${talend.job.applyContextToChildren}</talend.job.applyContextToChildren>
+                                                    <talend.product.version>${talend.product.version}</talend.product.version>
+                                                    <talend.job.finalName>${talend.job.finalName}</talend.job.finalName>
+                                                </labels>
+                                                <tags>
+                                                    <tag>${talend.job.version}</tag>
+                                                </tags>
+                                                <runCmds>
+                                                    <run>chmod +x /maven/${talend.job.name}/${talend.job.name}_run.sh</run>
+                                                </runCmds>
+                                                <workdir>/maven/${talend.job.name}</workdir>
+                                                <cmd>
+                                                    <exec>
+                                                        <arg>./${talend.job.name}_run.sh</arg>
+                                                    </exec>
+                                                </cmd>
+                                                <assembly><!-- includes the 
+                                                        artifact generated by the current pom -->
+                                                    <descriptor>${basedir}/src/main/assemblies/assembly.xml</descriptor>
+                                                </assembly>
+                                            </build>
+                                        </image>
+                                    </images>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
