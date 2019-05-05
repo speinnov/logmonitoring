@@ -2,13 +2,13 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+<!--
   <parent>
       <groupId>org.sonatype.buildsupport</groupId>
       <artifactId>public-parent</artifactId>
       <version>3</version>
   </parent>
-
+-->
   <groupId>com.speinnov.tools.monitoring</groupId>
   <artifactId>logginmanager</artifactId>
   <version>1.5-SNAPSHOT</version>
@@ -218,25 +218,29 @@
           <version>3.0.0</version>
         </plugin>
 
+<!--
         <plugin>
               <groupId>org.sonatype.plugins</groupId>
               <artifactId>nexus-staging-maven-plugin</artifactId>
               <version>1.6.8</version>
               <executions>
                  <execution>
-                    <id>default-deploy</id>
+                    <id>talend-snapshots</id>
                     <phase>deploy</phase>
                     <goals>
-                       <goal>deploy-file</goal>
+                       <goal>deploy</goal>
                     </goals>
                  </execution>
               </executions>
               <configuration>
                  <serverId>nexus</serverId>
-                 <nexusUrl>http://vps40346.lws-hosting.com:8888/nexus/</nexusUrl>
+                 <nexusUrl>http://vps40346.lws-hosting.com:8888/nexus</nexusUrl>
+
                  <skipStaging>true</skipStaging>
               </configuration>
         </plugin>
+-->
+
 
 
 <!--
@@ -255,6 +259,58 @@
             </configuration>
            </plugin>
 -->
+
+<!--
+<plugin>
+    <artifactId>maven-deploy-plugin</artifactId>
+    <version>2.8.2</version>
+    <executions>
+        <execution>
+            <id>deploy-file</id>
+            <phase>deploy</phase>
+            <goals>
+                <goal>deploy-file</goal>
+            </goals>
+            <configuration>
+                <file>${project.build.directory}/${project.build.finalName}.jar</file>
+                <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots</url>
+                <groupId>com.speinnov.tools.monitoring</groupId>
+                <artifactId>${artifactId}</artifactId>
+                <version>${project.version}</version>
+                <packaging>${project.packaging}</packaging>
+                <repositoryId>${targetRepositoryID2}</repositoryId>
+                 <pomFile>logginmanager/pom.xml</pomFile>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+-->
+
+<!--
+<file>${project.build.directory}/${project.build.finalName}.jar</file>
+<groupId>${project.groupId}</groupId>
+<artifactId>${project.artifactId}</artifactId>
+<version>${project.version}</version>
+<packaging>${project.packaging}</packaging>
+<generatePom>true</generatePom>
+<repositoryId>${targetRepositoryID2}</repositoryId>
+< !- -url>${baseNexusURL}/content/repositories/${targetRepositoryID}</url- - >
+<url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/${targetRepositoryID}</url>
+<sources>${project.build.directory}/${project.build.finalName}-sources.jar</sources>
+< ! - - pomFile>pom.xml</pomFile- - >
+<groupId>com.speinnov.tools.monitoring</groupId>
+<artifactId>logginmanager</artifactId>
+<version>1.5-SNAPSHOT</version>
+<packaging>jar</packaging>
+<name>logginmanager</name>
+-->
+
+
+
+
+
+
+
            <plugin>
              <artifactId>maven-deploy-plugin</artifactId>
              <version>2.8.2</version>
@@ -262,18 +318,26 @@
                       <skip>true</skip>
                 </configuration>
                 <executions>
+
                        <execution>
                           <id>default-deploy</id>
+                          <goals>
+                              <goal>deploy</goal>
+                          </goals>
+                          <phase>deploy</phase>
+
                           <configuration>
                             <skip>true</skip>
                           </configuration>
                        </execution>
+
                        <execution>
                             <id>deploy-node-modules-artifact</id>
                             <goals>
-                                <goal>deploy-file</goal>
+                                <goal>deploy</goal>
                             </goals>
-                            <phase>deploy</phase>
+                            <phase>deploy-file</phase>
+
                             <configuration>
                               <!--
                                  <repositoryid>${project.distributionManagementArtifactRepository.id}</repositoryid>
