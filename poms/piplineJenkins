@@ -1,0 +1,66 @@
+piplineJenkins
+
+CICD_TALEND/pom.xml 
+
+
+
+<properties>
+    <!-- Required. Commandline application workspace and Studio path, only for local(script) mode -->
+
+    <commandline.workspace>/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_job_pipeline</commandline.workspace>
+
+    <product.path>/Applications/CommandLine641</product.path>
+
+    <!-- Optional. Specify target directory where generated sources will be stored -->
+    <!--projectsTargetDirectory>${basedir}/projectSources</projectsTargetDirectory/RunTests/projectSources -->
+    <projectsTargetDirectory>/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_job_pipeline/target/</projectsTargetDirectory>
+    <!-- Optional. Specify version for the artifact to be built. Can be set for each Job independentl-->
+    <launcherPath>/Applications/CommandLine641/plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar</launcherPath>
+    <deploy.version>1.1.0-SNAPSHOT</deploy.version>
+</properties>
+
+
+<configuration>
+  <commandlineHost default-value="localhost">${commandline.host}</commandlineHost>
+  <commandlinePort default-value="8002">${commandline.port}</commandlinePort>
+  <commandlineUser default-value="jobbuilder@talend.com">${commandline.user}</commandlineUser>
+  <commandlineWorkspace>${commandline.workspace}</commandlineWorkspace>
+  <deployVersion>${deploy.version}</deployVersion>
+  <itemFilter>${itemFilter}</itemFilter>
+  <projectsTargetDirectory default-value="${basedir}/projectSources">${projectsTargetDirectory}</projectsTargetDirectory>
+  <deploy.version>1.1.0-SNAPSHOT</deploy.version>
+</configuration>
+
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/commandline_workspace
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/commandline_workspace/target
+-DitemFilter=(type=process)
+-Ddeploy.version=1.1.0-SNAPSHOT
+
+
+validate -fn -e
+
+
+Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+
+.apache.maven.lifecycle.LifecyclePhaseNotFoundException: Unknown lifecycle phase "deploye". You must specify a valid lifecycle phase or a goal in the format <plugin-prefix>:<goal> or <plugin-group-id>:<plugin-artifact-id>[:<plugin-version>]:<goal>. Available lifecycle phases are: validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy, pre-clean, clean, post-clean, pre-site, site, post-site, site-deploy.
+
+
+
+
+mvn -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/talend_pom.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/commandline/maven_user_settings.xml -Ddeploy.version=1.1.0-SNAPSHOT -Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/commandline_workspace -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/projectSources -Dcommandline.user=jobbuilder@talend.com -Dcommandline.port=8002 -Dcommandline.host=macbookprobigdata.local -DitemFilter="(type=process)" org.talend:ci.builder:6.4.1:generate -e -X
+
+mvn -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/talend_pom.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/commandline/maven_user_settings.xml -Ddeploy.version=1.1.0-SNAPSHOT -Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/projectSources -Dcommandline.user=jobbuilder@talend.com -Dcommandline.port=8002 -Dcommandline.host=macbookprobigdata.local -DitemFilter="(type=process)" org.talend:ci.builder:6.4.1:generate -e -X generate-sources -fn -e
+
+
+
+mvn -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/talend_pom.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/commandline/maven_user_settings.xml -Ddeploy.version=1.1.0-SNAPSHOT -Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/projectSources -Dcommandline.user=jobbuilder@talend.com -Dcommandline.port=8002 -Dcommandline.host=macbookprobigdata.local org.talend:ci.builder:6.4.1:generate
+
+
+
+mvn -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/talend_pom.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/commandline/maven_user_settings.xml -Ddeploy.version=1.1.0-SNAPSHOT -Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/projectSources -Dcommandline.user=jobbuilder@talend.com -Dcommandline.port=8002 -Dcommandline.host=macbookprobigdata.local org.talend:ci.builder:6.4.1:generate
