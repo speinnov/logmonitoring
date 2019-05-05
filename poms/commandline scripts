@@ -1,0 +1,330 @@
+JENKINS:
+
+https://www.talendbyexample.com/talend-job-deployment-shell-launchers-reference.html
+
+Commandline script mode
+
+/Talend-Studio-linux-gtk-x86 -nosplash --disableLocalMode  -application org.talend.commandline.CommandLine
+-consoleLog -data commandline-workspace scriptFile /Users/hadoop/talend_build/scripts.sh
+
+
+initRemote http://localhost:8888/org.talend.administrator -ul admin@company.com -up passwd
+logonProject -pn myProject
+exportItems /tmp/myitems.zip
+
+sh /Users/hadoop/TalendStudio-6.4.1_TIS/studio/Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa -nosplash -application org.talend.commandline.CommandLine -data /Users/hadoop/talend_build/projects startServer -p 8002 -vmargs -Djava.awt.headless=true -Dawt.toolkit=sun.awt.HToolkit -Xms64m -Xmx1024m -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+
+./Users/hadoop/TalendStudio-6.4.1_TIS/studio/Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa -nosplash -application org.talend.commandline.CommandLine -consoleLog -data /Users/hadoop/talend_build/projects scriptFile /Users/hadoop/talend_build/scripts.sh
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa -nosplash -application --disableLocalMode org.talend.commandline.CommandLine -consoleLog -data /Users/hadoop/talend_build/projects scriptFile /Users/hadoop/talend_build/scripts.sh
+
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa -nosplash -application org.talend.commandline.CommandLine -data /Users/hadoop/talend_build/projects  -vmargs -Djava.awt.headless=true -Dawt.toolkit=sun.awt.HToolkit -Xms64m -Xmx1024m -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts scriptFile /Users/hadoop/talend_build/scripts.sh
+
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa -nosplash -application org.talend.commandline.CommandLine -consoleLog -data /Users/hadoop/talend_build/projects startServer -p 8002
+
+
+
+
+
+./Talend-Studio-macosx-cocoa.app/Contents/MacOS/Talend-Studio-macosx-cocoa -nosplash -application org.talend.commandline.CommandLine -consoleLog -data /Users/hadoop/talend_build/projects startServer -p 8002
+
+
+[Standard Jobs]
+  [testJob]
+    JobReader
+  cicdjob
+
+
+  executeAllJob
+
+  executeJob cicdjob -i java -jv 2.0
+
+
+/Users/hadoop/talend_build
+/Users/hadoop/talend_builder/JENKINS_HOME/workspace/talend_build/projects
+****
+http://macbookprobigdata.local:9090/job/BuildSrc/build?token=1234	
+TOKEN_NAME 
+ou 
+http://macbookprobigdata.local:9090/buildWithParameters?token=TOKEN_NAME
+
+
+
+
+commandline scripts
+
+https://help.talend.com/reader/ElruncSKqadnY2jVuXhG8g/7yX8ab9NjfSv9QQjpy0xAg
+
+
+
+initRemote http://macbookprobigdata.local:8180/tac641 -ul social@gen.com -up socgen
+
+logonProject -pn soccicd -ul social@gen.com -up socgen -br branches/soccicd_dev
+
+listProject -b  (to see project name)
+
+
+createJob NameOfJob -sf cicdjobs_cmdline.jobscript
+
+
+
+
+mode script
+
+initRemote http://macbookprobigdata.local:8180/tac641 -ul social@gen.com -up socgen
+logonProject -pn CICD_TALEND
+exportItems /tmp/myitems.zip
+
+ [stopServer -f helpFilter 
+
+ listExecutionServer 
+
+ listItem -if <filterExpr>|-m 
+
+ initLocal 
+
+ initRemote  <adminUrl> -ul <login>|-up <password> 
+ logoffProject 
+ logonProject -pn <technical name>|-ul <login>|-up <password>|-gt|-br <branch>|-ro 
+
+ executeAllJob -i <path>|-jc <context name>|-jcp <key=value1> [<key=value2> ...]|-jrdd <path>|-jt <time (in sec)>|-jactc|-if <filterExpr>          
+
+exportAllJob -dd <path>|-jc <context name>|-jall <log4j level name>|-jactc|-if <filterExpr>       
+
+executeJob <jobName> -i <path>|-jv <version>|-jc <context name>|-jcp <key=value1> [<key=value2>   
+...]|-jrdd <path>|-jt <time (in sec)>|-jactc 
+
+deleteItems -if <filterExpr> 
+
+changeVersion           
+<newVersion (x.x | nextMajor | nextMinor)> -flv|-d|-if <filterExpr> 
+
+changeStatus <newStatusCode>  
+-d|-if <filterExpr> 
+
+importDatabaseMetadata <filePath> 
+
+importDelimitedMetadata <filePath>          
+
+showVersion 
+
+help <commandName> 
+
+createJob <jobName> -sf <file path>|-o 
+
+generateMigrationReport -dp 
+<dataPath (dir)>|-rp <reportPath (dir)>|-from <from_version>|-to <to_version1> [<to_version2>     
+...]|-ps <projects> 
+
+publishAction <actionName> -v <version>|-u <username>|-p <password>|-r        
+<url>|-s|-i|-na|-w <workspace> 
+
+listCloudWorkspaces -u <username>|-p <password>|-r <url>|-n <name> 
+populateAudit -ju <jdbc_url>|-dd <driver>|-du <user>|-up <password> 
+
+generateAuditReport <auditId> 
+-fp <filePath>|-t <template> 
+
+populateAndGenerateReport -ju <jdbc_url>|-dd <driver>|-du <user>|-up 
+<password>|-fp <filePath>|-t <template> 
+
+exportJob <jobName> -dd <path>|-af <filename>|-jc         
+<context name>|-jall <log4j level name>|-jv <version>|-jactc|-jstats|-eo|-ant|-maven 
+
+buildJob <jobName> -dd <path>|-af <filename>|-jc <context name>|-jall <log4j level name>|-jv <version>|-jt 
+<type>|-jactc|-jstats|-eo|-tc|-ant|-maven|-il|-ic|-ijs|-its|-et|-bin 
+
+buildJob cicd_main -dd /tmp -af cicd -maven -bin
+
+setUserComponentPath -up  <path>|-c 
+
+getCommandStatus <commandId> -ci <index> 
+
+listProject -b 
+
+listCommand -a|-q|-r 
+
+importItems <source (dir|.zip)> -if <filterExpr>|-o|-s|-sl|-im 
+
+listJob 
+
+exportItems <destination   (dir|.zip)> -d|-if <filterExpr> 
+
+startGroup -o <infor> 
+
+stopGroup 
+
+cancelGroup 
+
+executeJobOnServer <jobName> -es <name>|-jv <version>|-jc <context name>|-jcp <key=value1> [<key=value2> ...]|-jsp   
+<port>|-jtp <port>|-jactc|-useSSL|-un <username>|-pd <password>|-jrrd <jobResultDestDir>|-jall  <level>|-ra <runas> 
+
+deployJobToServer <jobName> -es <name>|-jv <version>|-jc <context name>|-jactc|-useSSL|-un <username>|-pd <password>
+|-jall <level>|-sp <port>|-tp <port>            
+
+deployJobToServer cicd_main -es cicd -jv Latest -jc Default -jactc -un soc@socgen.com -pd socgen -sp 8700 -tp 8788
+
+createProject -pn <technical name>|-pd <description>|-pl <language (java/perl)>|-pa <author login>|-pap <password> 
+
+createTask <taskName> -pn <project name>|-d <description>|-a|-b <branch name>|-jn <job name>|-jv <job version>|-jc <job context>|-jactc|-rjc|-esn <execution server>|-ouj <on unavailable jobserver>|-ese|-asce|-ousj <unknown state job> 
+
+createTask tsk1 -pn soccicd -d 'hjhjhgjhg' -b branches/soccicd_dev -jn cic_main -esn localhost
+
+createTask tsk11 -pn soccicd -d 'hjhjhgjhg' -b branches/soccicd_dev -jn cicd_main -jv  Latest -jc Default -esn localhost -jactc -rjc -ouj 'Reset task'
+
+
+soccicd
+branches/soccicd_dev
+cicd_main
+Latest
+Default
+
+
+exportAsCWM <dbConnectionName>  -dd <path> 
+
+checkAndUpdate -tu <user>|-tup <password> publishJob <jobName> -r <url>|-u             
+<username>|-p <password>|-v <version>|-pv <version>|-g <group>|-a <artifactId>|-s|-t              
+<exportType>|-jc <contextName>|-jactc 
+
+buildProjectSources -if <filterExpr>|-dv <version>          
+changeMavenVersion <maven-version> -s|-if <filterExpr> migrationCheck -dp <dataPath (dir)>        
+executeReport -n <name>|-p <path>|-pc <context name>]                                             
+-------------------------------------------------------------------------------------------------- 
+
+GIT
+
++refs/heads/master:refs/remotes/origin/master +refs/heads/soccicd_dev:refs/remotes/origin/soccicd_dev
+
+
+-DaltDeploymentRepository=id::layout::url
+
+http://macbookprobigdata.local:8181/nexus/content/repositories/talend-snapshots/
+
+
+-DaltDeploymentRepository=snapshots::default::http://macbookprobigdata.local:8181/nexus/content/repositories/maven-snapshots/
+-DaltDeploymentRepository=releases::default::http://macbookprobigdata.local:8181/nexus/content/repositories/maven-releases/
+
+
+
+BUILD STEPS
+
+-Dproduct.path=/Applications/CommandLine641
+-Dgeneration.type=local
+${deploy_nexus}
+
+-Dproduct.path=/Applications/CommandLine641
+-Dgeneration.type=local
+${deploy_nexus}
+
+
+generate-sources
+
+org.talend:ci.builder:6.4.1:generate -X
+
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/RunTests/projectSources
+-DitemFilter=(type=process_mr)and(label=job_ProcessWeatherData) 
+
+
+-Dcommandline.workspace=<jenkins_path>/workspace/GenerateSources/projects
+-Dcommandline.host=localhost
+-Dcommandline.port=8002
+-Dcommandline.user=xxx@talend.com
+-DprojectsTargetDirectory=<jenkins_path>/workspace/RunTests/projectSources
+-DitemFilter=(type=process)and(path=TEST)
+
+-DitemFilter=(type=process_mr)and(label=job_ProcessWeatherData) 
+
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/RunTests/projectSources
+-Djvm.arguments=-ea -Xms512m -Dfile.encoding=UTF-8 -Xmx2000m -XX:+CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError
+-DlauncherPath=${product.path}/plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar
+-Ddeploy.version=1.0.0-SNAPSHOT
+-DitemFilter=(type=process_mr)and(label=cicd_talend_main)
+
+<itemFilter>(status=TEST)or(status=PROD)or(status="")
+
+-Dproduct.path=/Applications/CommandLine641
+-Dgeneration.type=local
+
+
+
+-Xms512m
+-Xmx1300m
+-XX:+CMSClassUnloadingEnabled
+-XX:MinHeapFreeRatio=10
+-XX:MaxHeapFreeRatio=20
+-XX:+HeapDumpOnOutOfMemoryError
+
+-Xms512m -Xmx2000m -Dfile.encoding=UTF-8 -XX:+CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError
+
+
+/Applications/CommandLine641/configuration/maven_user_settings.xml
+
+
++refs/heads/master:refs/remotes/origin/master   (refs/remotes/origin/master)
+
+***********
+
+compilation
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=${basedir}/projectSources
+-DaltDeploymentRepository=talend-snapshots::talend-snapshots::http://macbookprobigdata.local:8181/nexus
+
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/RunTests/projectSources
+-DaltDeploymentRepository=talend-snapshots::talend-snapshots::http://macbookprobigdata.local:8181/nexus
+
+
+mvn -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/projectSources/CICD_TALEND/pom.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/maven/maven_user_settings.xml -Ddeploy.version=1.1.1-SNAPSHOT -Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/ -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/projectSources 
+-Dcommandline.user=jobbuilder@talend.com -Dcommandline.port=8002 -Dcommandline.host=macbookprobigdata.local 
+-DaltDeploymentRepository=talend-snapshots::talend-snapshots::http://localhost:8181/nexus deploy -fn -e
+
+
+
+https://help.sonatype.com/repomanager2/staging-releases/configuring-your-project-for-deployment
+
+
+mvn deploy -DaltDeploymentRepository=local::default::file://path
+
+deploy -fn -e
+
+
+-DaltDeploymentRepository=id::layout::url
+
+http://macbookprobigdata.local:8181/nexus/content/repositories/talend-snapshots/
+
+
+-DaltDeploymentRepository=snapshots::default::http://macbookprobigdata.local:8181/nexus/content/repositories/maven-snapshots/
+-DaltDeploymentRepository=releases::default::http://macbookprobigdata.local:8181/nexus/content/repositories/maven-releases/
+
+-DaltDeploymentRepository=talend-snapshots::talend-snapshots::http://macbookprobigdata.local:8181/nexus/content/repositories/talend-snapshots/
+-DaltDeploymentRepository=talend-releases::talend-releases::http://macbookprobigdata.local:8181/nexus/content/repositories/talend-releases/
+talend-snapshots
+
+
+mvn -e clean install deploy
+-DaltDeploymentRepository=ui-snapshots::default::http://localhost:8081/artifactory/libs-snapshot-local/
+
+
+ANSIBLE
+
+https://blog.savoirfairelinux.com/en-ca/2017/ansible-nexus-repository-manager/
