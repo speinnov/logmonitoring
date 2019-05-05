@@ -1,0 +1,58 @@
+Ansible
+
+organisation des répertoires
+
+
+https://github.com/ansible/ansible-examples
+
+rep de travail/
+		roles
+			basic
+				tasks
+					main.yml
+		hosts
+		ansible.cfg
+		playbook.yml
+
+
+dans le fichier de CFG
+inventory      = /Users/hadoop/ansible/hosts
+plugin_filters_cfg = /Users/hadoop/ansible/plugin_filters.yml
+sudo_user      = root
+roles_path    = /Users/hadoop/ansible/roles
+executable = /bin/sh
+enable_plugins = host_list, virtualbox, yaml, constructed
+control_path_dir = ~/.ansible/cp
+
+export ANSIBLE_HOSTS=/root/ansible_hosts
+
+Your /etc/ansible/hosts file would look like this:
+child1.dev
+child2.dev
+
+ssh-keygen -t rsa -C "name@example.org"
+ root@master:~# ssh-copy-id user@child1.dev 
+root@master:~# ssh-copy-id user@child1.dev
+
+
+run a playbook.yml
+
+run a playbook
+#> ansible-playbook -K playbook.yml 
+
+ansible all --inventory-file=/root/ansible_hosts -m ping
+
+test
+
+ansible all -m ping
+child1.dev | success >> {
+    "changed": false, 
+    "ping": "pong"
+}
+child2.dev | success >> {
+    "changed": false, 
+    "ping": "pong"
+}
+
+
+
