@@ -1,0 +1,68 @@
+		
+
+cd /Users/hadoop/github_repo/git_maven/mvn_project/src
+javac main/java/hello/hello.java
+java main/java/hello/hello
+ 
+  
+⁨/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/ci.builder-6.4.1.jar 
+
+/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/ci.builder-6.4.1.pom
+
+mvn install:install-file -Dfile=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/ci.builder-6.4.1.jar   -DpomFile=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/ci.builder-6.4.1.pom
+
+ 
+
+
+
+cd /Users/hadoop/eclipse-workspace/jenkinsJava/src
+
+javac jenkinsJava/helloworld.java 
+
+ 
+Git
+
+git init
+git add README.md
+git add .
+git commot -m "add hello"
+git remote add origin https://github.com/speinnov/git_maven.git
+git push -u origin master
+
+push old repo
+
+git remote add origin https://github.com/speinnov/git_maven.git
+git push -u origin master
+
+
+
+http://macbookprobigdata.local:9090/blue/pipelines
+
+
+commandlineTests.jmx
+
+jmeter/bin
+jmeter.bat(Windows)/jmeter.sh(Linux) -n -t test-file [-p property-file] [-l results-file] [-j log-file]
+
+sh jmeter -n -t /Users/hadoop/apache-jmeter-5.0⁩/Mytests⁩/commandlineTests.jmx  -l /Users/hadoop/apache-jmeter-5.0⁩/Mytests⁩/commandlineTestsresult.txt
+
+-n  commanline mode
+
+-t script
+
+-l resultfile
+
+Help 
+sh jmeter -h
+sh jmeter -?
+
+
+*****
+
+ftp server
+
+ftp://speedtest.tele2.net/
+
+ftp://speedtest.tele2.net/5MB.zip
+
+****
