@@ -1,0 +1,95 @@
+Build source
+
+https://www.baeldung.com/maven-release-nexus
+
+
+
+https://github.com/speinnov/jenkins.git
+
+origin
+CICD_JOB +refs/heads/master:refs/remotes/origin/master
+
+*/master
+
+CICD_JOB
+
+mvn groupId:artifactId:goal -o -P profile-1,profile-2
+
+org.talend:ci.builder:6.4.1:generate -X
+
+/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_pom.xml
+
+/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_remote_pom.xml 
+
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/projects
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/RunTests/projectSources
+
+-Djvm.arguments=-ea -Xms512m -Dfile.encoding=UTF-8 -Xmx2000m -XX:+CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError
+-DlauncherPath=${product.path}/plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar
+-Ddeploy.version=1.0.0-SNAPSHOT
+-DitemFilter=(type=process)and(label=cicd_talend_main)
+-DitemFilter=(label=testJob)
+
+
+filepath
+
+/Applications/CommandLine641/configuration/maven_user_settings.xml
+
+
+**************
+
+
+ /usr/local/Cellar/maven/3.5.3/libexec/bin/mvn 
+ -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_remote_pom.xml 
+
+ -s /Applications/CommandLine641/configuration/maven_user_settings.xml 
+
+ -D-Ddeploy.version=1.0.0-SNAPSHOT 
+ -D-DlauncherPath=${product.path}/plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar 
+
+ "-D-Djvm.arguments=-ea -Xms512m -Dfile.encoding=UTF-8 -Xmx2000m -XX:+CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError" 
+
+ -D-Dcommandline.user=jobbuilder@talend.com 
+ -D-Dcommandline.port=8002 
+ -D-Dcommandline.host=macbookprobigdata.local 
+ -D-DitemFilter=(type=process)and(label=cicd_talend_main) 
+
+ org.talend:ci.builder:6.4.1:generate -X
+
+Apache Maven 3.5.3 (3383c37e1f9e9b3bc3df5050c29c8aff9f295297; 2018-02-24T20:49:05+01:00)
+Maven home: /usr/local/Cellar/maven/3.5.3/libexec
+Java version: 1.8.0_92, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/jre
+Default locale: fr_FR, platform encoding: UTF-8
+
+
+************
+
+mvn clean package -pl CI_PROJECT -am
+
+\jobs\process\subchild_job_feature334_0.1 -pl CI_PROJECT -amd 
+
+Example of Maven command used to clean the project build directory (deleting old files), launch the generation of all existing Jobs and Tests and deploy the packages on the snapshots Nexus repository :
+
+mvn clean deploy -DaltDeploymentRepository=snapshots::default::http://macbookprobigdata.local:8181/nexus/content/repositories/talend-releases/
+
+-pl CICD_JOB -am
+
+mvn  clean deploy -pl CICD_JOB -am  -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/BuildJob_remote_pom.xml -s /Applcations/CommandLine641/configuration/maven_user_settings.xml  -Ddeploy.version=1.0.0-SNAPSHOT  -DitemFilter="(type=process)and(label=cicd_talend_main)" -Dcommandline.workspace="/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/commandline_workspace/" -Dcommandline.host=macbookprobigdata.local -Dcommandline.port=8002 -Dcommandline.user=jobbuilder@talend.com -DprojectsTargetDirectory=/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/GenerateSources/BuildSources org.talend:ci.builder:6.4.1:generate -DaltDeploymentRepository=snapshots::default::http://macbookprobigdata.local:8181/nexus/content/repositories/talend-releases/i
+
+
+
+
+*******
+
+mvn -B -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_Generate_Execute_Deploy/maven/talend_pom_remote.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_Generate_Execute_Deploy/maven/maven_user_settings.xml -Dcommandline.workspace /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_Generate_Execute_Deploy clean generate -fn -e
+
+-B -f /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_Generate_Execute_Deploy/talend_pom_local.xml -s /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_Generate_Execute_Deploy/maven/maven_user_settings.xml clean generate-sources -fn -e
+
+java -Dproduct.path=/Applications/CommandLine641/ -Dgeneration.type=local  -cp /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/plugins/maven-plugin/WEB-INF/lib/maven35-agent-1.12-alpha-1.jar:/usr/local/Cellar/maven/3.5.3/libexec/boot/plexus-classworlds-2.5.2.jar:/usr/local/Cellar/maven/3.5.3/libexec/conf/logging jenkins.maven3.agent.Maven35Main /usr/local/Cellar/maven/3.5.3/libexec /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/war/WEB-INF/lib/remoting-3.27.jar /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/plugins/maven-plugin/WEB-INF/lib/maven35-interceptor-1.12-alpha-1.jar /Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-commons-1.12-alpha-1.jar 62918
+
+
