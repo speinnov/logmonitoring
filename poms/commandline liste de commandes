@@ -1,0 +1,442 @@
+--------------------------------------------------------------------------------------------------
+Talend Commandline Plugin :                                                                       
+ * arguments can be surrounded by (") or (') characters                                           
+
+ * the semi-colon (;) character can be used to separate commands from each other                  
+
+ * special characters (space \ " ' ;) can be escaped using the character (\)                      
+
+--------------------------------------------------------------------------------------------------
+wrong number of ' characters                                                                      
+--------------------------------------------------------------------------------------------------
+Usage:                                                                                            
+ 
+ [
+
+stopServer -f 
+
+-------------------------------------------------------------------------------------------------- 
+
+helpFilter                                                       shows filter help
+ 
+
+
+ Filters are only applied on the last version of each item 
+
+ (filter1)and(filter2)[...]   and filter  
+ (filter1)or(filter2)[...]    or filter  
+ (filter)                     useless filter 
+ !filter                      invert filter  
+
+ type=    based on item type (svg_business_process / metadata_file_linkrules   / metadata_file_brms / tdq_analysis_element / tdq_report_element /  tdq_indicator_element / tdq_pattern_element /   tdq_source_file_element / tdq_jraxml_element / tdq_rules / tdq_exchange / metadata_header_footer / business_process / documentation / joblet_doc / joblet / process_mr / spark_joblet /  job_script / job_doc / metadata_edifact / metadata_file_ftp / datastewardship / salesforce / azurestorage / marketo / snowflake / hadoopcluster / hcatalog / hdfs / metadata_file_hl7 / json /  metadata_mdmconnection / metadata_connections /   metadata_file_delimited / metadata_file_positional / metadata_file_regexp / metadata_file_xml / metadata_file_ldif /     metadata_file_excel / metadata_salesforce_schema / metadata_ldap_schema / metadata_wsdl_schema /  metadata_generic_schema / metadata_nosql_connections / oozie /      pig_udf / metadata_file_rules / metadata_sapconnections / routines  / context / process / sqlpatterns / survivorship_file_item /   test_container / maps / structures / namespaces / sample_data /  reports / databases / metadata_validation_rules) 
+
+ path=                        based on item path     
+ label=                       based on item name/label   
+ label%                       based on item name/label with * or ?  
+ path%                        based on item path with * or ?  
+ version=                     based on item version with 'x.x' or 'lastVersion'  
+ version<                     based on item version with 'x.x'  
+ version>                     based on item version with 'x.x'  
+ author=                      based on item author login  
+ status=                      based on item status code 
+
+
+
+--------------------------------------------------------------------------------------------------
+
+
+listExecutionServer 
+
+listItem -if <filterExpr>|-m 
+
+initLocal 
+
+initRemote  <adminUrl> -ul <login>|-up <password> 
+
+logoffProject 
+
+logonProject -pn <technical name>|-ul <login>|-up <password>|-gt|-br <branch>|-ro 
+
+executeAllJob -i <path>|-jc <context name>|-jcp <key=value1> [<key=value2> ...]|-jrdd <path>|-jt <time (in sec)>|-jactc|-if <filterExpr>          
+
+
+exportAllJob -dd <path>|-jc <context name>|-jall <log4j level name>|-jactc|-if <filterExpr>       
+
+executeJob <jobName> -i <path>|-jv <version>|-jc <context name>|-jcp <key=value1> [<key=value2>...]|-jrdd <path>|-jt <time (in sec)>|-jactc 
+
+deleteItems -if <filterExpr> 
+
+changeVersion <newVersion (x.x | nextMajor | nextMinor)> -flv|-d|-if <filterExpr> 
+
+changeStatus <newStatusCode> -d|-if <filterExpr> 
+
+importDatabaseMetadata <filePath> 
+
+importDelimitedMetadata <filePath>          
+
+showVersion help <commandName> 
+
+createJob <jobName> -sf <file path>|-o 
+
+generateMigrationReport -dp <dataPath (dir)>|-rp <reportPath (dir)>|-from <from_version>|-to <to_version1> [<to_version2> ...]|-ps <projects> 
+
+publishAction <actionName> -v <version>|-u <username>|-p <password>|-r        
+<url>|-s|-i|-na|-w <workspace> 
+
+listCloudWorkspaces -u <username>|-p <password>|-r <url>|-n <name> 
+populateAudit -ju <jdbc_url>|-dd <driver>|-du <user>|-up <password> 
+
+generateAuditReport <auditId> 
+-fp <filePath>|-t <template> 
+
+populateAndGenerateReport -ju <jdbc_url>|-dd <driver>|-du <user>|-up 
+<password>|-fp <filePath>|-t <template> exportJob <jobName> -dd <path>|-af <filename>|-jc         
+<context name>|-jall <log4j level name>|-jv <version>|-jactc|-jstats|-eo|-ant|-maven buildJob     
+<jobName> -dd <path>|-af <filename>|-jc <context name>|-jall <log4j level name>|-jv <version>|-jt 
+<type>|-jactc|-jstats|-eo|-tc|-ant|-maven|-il|-ic|-ijs|-its|-et|-bin setUserComponentPath -up     
+<path>|-c 
+
+getCommandStatus <commandId> -ci <index> 
+
+listProject -b 
+
+listCommand -a|-q|-r            
+
+importItems <source (dir|.zip)> -if <filterExpr>|-o|-s|-sl|-im listJob 
+
+exportItems <destination   
+(dir|.zip)> -d|-if <filterExpr> 
+
+startGroup -o <infor> 
+
+stopGroup 
+
+cancelGroup 
+
+executeJobOnServer    
+<jobName> -es <name>|-jv <version>|-jc <context name>|-jcp <key=value1> [<key=value2> ...]|-jsp   
+<port>|-jtp <port>|-jactc|-useSSL|-un <username>|-pd <password>|-jrrd <jobResultDestDir>|-jall    
+<level>|-ra <runas> deployJobToServer <jobName> -es <name>|-jv <version>|-jc <context             
+name>|-jactc|-useSSL|-un <username>|-pd <password>|-jall <level>|-sp <port>|-tp <port>            
+
+createProject -pn <technical name>|-pd <description>|-pl <language (java/perl)>|-pa <author       
+login>|-pap <password> createTask <taskName> -pn <project name>|-d <description>|-a|-b <branch    
+name>|-jn <job name>|-jv <job version>|-jc <job context>|-jactc|-rjc|-esn <execution server>|-ouj 
+<on unavailable jobserver>|-ese|-asce|-ousj <unknown state job> 
+
+exportAsCWM <dbConnectionName>  -dd <path> 
+
+checkAndUpdate -tu <user>|-tup <password> 
+
+publishJob <jobName> -r <url>|-u             
+<username>|-p <password>|-v <version>|-pv <version>|-g <group>|-a <artifactId>|-s|-t              
+<exportType>|-jc <contextName>|-jactc 
+
+buildProjectSources -if <filterExpr>|-dv <version>          
+
+changeMavenVersion <maven-version> -s|-if <filterExpr> 
+
+migrationCheck -dp <dataPath (dir)>        
+
+executeReport -n <name>|-p <path>|-pc <context name>] 
+
+--------------------------------------------------------------------------------------------------
+  stopServer                                                       stops server don't wait for queued commands                   
+
+      -f (--force)                                                 
+
+
+ stopServer
+--------------------------------------------------------------------------------------------------
+
+  
+  listExecutionServer               
+                               lists [virtual] execution      
+
+                                                                   servers                        
+--------------------------------------------------------------------------------------------------
+  listItem                                                         lists items                    
+      -if (--item-filter) filterExpr                               item filter expression         
+      -m (--metadata)                                              show item's metadata           
+--------------------------------------------------------------------------------------------------
+  initLocal                                                        init local repository          
+--------------------------------------------------------------------------------------------------
+  initRemote adminUrl                                                     init remote repository         
+             -ul (--user-login) login                                     user login                     
+             -up (--user-password) password                               user password                  
+--------------------------------------------------------------------------------------------------
+  logoffProject                                                    logs off                       
+--------------------------------------------------------------------------------------------------
+  logonProject                                          logs on a project              
+      -pn (--project-name) technical name               project name                   
+      -ul (--user-login) login                          user login                     
+      -up (--user-password) password                    user password                  
+      -gt (--generate-templates)                        generate templates             
+      -br (--branch) branch                             branches/<branchName> ,tags/<tagName>           
+      -ro (--readOnly)                                  readOnly on current project    
+--------------------------------------------------------------------------------------------------
+  executeAllJob                                                    executes all                   
+      -i (--interpreter) path                                      perl/java interpreter path     
+      -jc (--job-context) context name                             chooses a job context          
+      -jcp (--job-context-param) key=value [key=value ...]         provides a job context param   
+      -jrdd (--job-result-destination-dir) path                    job execution result  destination dir 
+      -jt (--job-timeout) time (in sec)                            timeout of execution           
+      -jactc (--job-apply-context-to-children)                     apply context to children      
+      -if (--item-filter) filterExpr                               item filter expression         
+--------------------------------------------------------------------------------------------------
+  exportAllJob                                                     exports all                    
+      -dd (--destination-directory) path                           destination directory          
+      -jc (--job-context) context name                             chooses a job context          
+      -jall (--job-add-log4j-level) log4j level name               generate with the log4j levels 
+      -jactc (--job-apply-context-to-children)                     apply context to children      
+      -if (--item-filter) filterExpr                               item filter expression         
+--------------------------------------------------------------------------------------------------
+  executeJob jobName                                               executes                       
+      -i (--interpreter) path                                      perl/java interpreter path     
+      -jv (--job-version) version                                  chooses a job version          
+      -jc (--job-context) context name                             chooses a job context          
+      -jcp (--job-context-param) key=value [key=value ...]         provides a job context param   
+      -jrdd (--job-result-destination-dir) path                    job execution result destination dir
+      -jt (--job-timeout) time (in sec)                            timeout of execution           
+      -jactc (--job-apply-context-to-children)                     apply context to children      
+--------------------------------------------------------------------------------------------------
+  deleteItems                                                      delete items                   
+      -if (--item-filter) filterExpr                               item filter expression         
+--------------------------------------------------------------------------------------------------
+  changeVersion newVersion (x.x | nextMajor | nextMinor)           changes items version          
+                                                                   Note: If you use the "-d" arg  with the item filter together,  we will do the filter first  and then get the dependences  of the filter items, finally  change all of them.            
+      -flv (--fix-latest-version)                                  flv fixing latest version          
+      -d (--dependencies)                                          -d update the dependencies        
+      -if (--item-filter) filterExpr                               -if item filter expression         
+--------------------------------------------------------------------------------------------------
+  changeStatus newStatusCode                                       changes items status  
+                                                                   Note: If you use the "-d" arg  with the item filter together, we will do the filter first and then get the dependences of the filter items, finally  change all of them.            
+      -d (--dependencies)                                          update the dependencies        
+      -if (--item-filter) filterExpr                               item filter expression         
+--------------------------------------------------------------------------------------------------
+  importDatabaseMetadata filePath                                  imports database metadata      
+--------------------------------------------------------------------------------------------------
+  importDelimitedMetadata filePath                                 imports delimited metadata     
+--------------------------------------------------------------------------------------------------
+  showVersion                                                      shows product version          
+--------------------------------------------------------------------------------------------------
+  help commandName                                                 shows help or detailed help    
+--------------------------------------------------------------------------------------------------
+  createJob jobName                                                create job from script file    
+      -sf (--script_file) file path                                job of script file             
+      -o (--over_write)                                            to overwrite if job existed    
+--------------------------------------------------------------------------------------------------
+  generateMigrationReport                             Generate migration check  report for upgrade safe  guarding 
+      -dp (--data-path) dataPath (dir)                a valid dir to load migration  check data                     
+      -rp (--report-path) reportPath (dir)            report path                    
+      -from (--from-version) from_version             migration check report source   product version                
+      -to (--to-version) to_version [to_version ...]  migration check report target   product version                
+      -ps (--projects) projects                       migration check report   projects  sepereated by |      
+--------------------------------------------------------------------------------------------------
+  publishAction actionName                                         publish action into cloud workspace  
+      -v (--version) version                                       action publishing version      
+      -u (--username) username                                     cloud user login name          
+      -p (--password) password                                     cloud user password            
+      -r (--url) url                                               inventory service URL          
+      -s (--sources)                                               publish action with sources    
+      -i (--image)                                                 publish action with screenshot 
+      -na (--not_accelerate)                                       don't accelerate the publish   
+      -w (--workspace) workspace                                   target workspace               
+--------------------------------------------------------------------------------------------------
+  listCloudWorkspaces                                              list all available workspaces  
+                                                                   for user (and action)          
+      -u (--username) username                                     cloud user login name          
+      -p (--password) password                                     cloud user password            
+      -r (--url) url                                               inventory service URL          
+      -n (--name) name                                             action name                    
+--------------------------------------------------------------------------------------------------
+  populateAudit                                                    Populate data into database    
+      -ju (--jdbc-url) jdbc_url                                    jdbc url for database          
+      -dd (--db-driver) driver                                     the driver of database         
+      -du (--db-user) user                                         the user of database           
+      -up (--user-password) password                               user password                  
+--------------------------------------------------------------------------------------------------
+  generateAuditReport auditId                                      Generate the audit report      
+      -fp (--filePath) filePath                                    filePath                       
+      -t (--template) template                                     Template of Audit              
+--------------------------------------------------------------------------------------------------
+  populateAndGenerateReport                                        Populate and generate audit    
+                                                                   report                         
+      -ju (--jdbc-url) jdbc_url                                    jdbc url for database          
+      -dd (--db-driver) driver                                     the driver of database         
+      -du (--db-user) user                                         the user of database           
+      -up (--user-password) password                               user password                  
+      -fp (--filePath) filePath                                    filePath                       
+      -t (--template) template                                     Template of Audit              
+--------------------------------------------------------------------------------------------------
+  exportJob jobName                                     exportJob in commandline v(deprecated)                   
+      -dd (--destination-directory) path                destination directory          
+      -af (--archive-filename) filename                 archive filename without vextension                      
+      -jc (--job-context) context name                  chooses a job context          
+      -jall (--job-add-log4j-level) log4j level name    generate with the log4j levels 
+      -jv (--job-version) version                       chooses a job version          
+      -jactc (--job-apply-context-to-children)          apply context to children      
+      -jstats (--job-add-statistics-code)               generate with the statistics vinstructions                   
+      -eo (--export-osgi)                               export job to osgi system      
+      -ant (--add-ant-script)                           export job with ant build   vscript                         
+      -maven (--add-maven-script)                       export job with maven build  vscript                         
+--------------------------------------------------------------------------------------------------
+  buildJob jobName                                         buildJob in commandline        
+      -dd (--destination-directory) path                    destination directory          
+      -af (--archive-filename) filename                     archive filename without  extension 
+      -jc (--job-context) context name                      chooses a job context          
+      -jall (--job-add-log4j-level) log4j level name        generate with the log4j levels 
+      -jv (--job-version) version                           chooses a job version          
+      -jt (--job-type) type                                 export the type of job   (PROCESS by default) 
+      -jactc (--job-apply-context-to-children)              apply context to children      
+      -jstats (--job-add-statistics-code)                   generate with the statistics  instructions   
+      -eo (--export-osgi)                                   export job to osgi system      
+      -tc (--add-test-containers)                           export job with test cases     
+      -ant (--add-ant-script)                               export job with ant build  script(deprecated) 
+      -maven (--add-maven-script)                           export job with maven build  script(deprecated) 
+      -il (--include-libs)                                  include libs when building job  with maven  
+      -ic (--include-context)                               include context when building    job with maven 
+      -ijs (--include-java-source)                          include java source codes when   building job with maven 
+      -its (--include-test-source)                          include test source codes when   building job with maven 
+      -et (--execute-tests)                                 execute tests when building   job with maven 
+      -bin (--binaries)                                     export binaries when building    job with maven  
+--------------------------------------------------------------------------------------------------
+  setUserComponentPath                                             Set user component path        
+      -up (--userComponentPath) path                               user component path            
+      -c (--clear)                                                 clear the user component path  
+--------------------------------------------------------------------------------------------------
+  getCommandStatus commandId                                       gets command status            
+      -ci (--childIndex) index                                     child index in Group Command   
+                                                                   (if other commands, will be    
+                                                                   ignore)                        
+--------------------------------------------------------------------------------------------------
+  listProject                                                      lists available projects       
+      -b (--branch)                                                Show branch projects in svn    
+--------------------------------------------------------------------------------------------------
+  listCommand                                                      lists commands                 
+      -a (--all)                                                   lists all commands             
+      -q (--queue)                                                 lists queue(waitting) commands 
+      -r (--run)                                                   lists running commands         
+--------------------------------------------------------------------------------------------------
+  importItems source (dir|.zip)                                    imports items                  
+      -if (--item-filter) filterExpr                               item filter expression         
+      -o (--overwrite)                                             overwrite existing items       
+      -s (--status)                                                import the status              
+      -sl (--statslogs)                                            import stats & logs params     
+      -im (--implicit)                                             import implicit                
+--------------------------------------------------------------------------------------------------
+  listJob                                                          lists jobs                     
+--------------------------------------------------------------------------------------------------
+  exportItems destination (dir|.zip)                               exports items                  
+      -d (--dependencies)                                          include dependencies           
+      -if (--item-filter) filterExpr                               item filter expression         
+--------------------------------------------------------------------------------------------------
+  startGroup                                                       start command group            
+      -o (--origin) infor                                          add some origin informations   
+--------------------------------------------------------------------------------------------------
+  stopGroup                                                        stop command group             
+--------------------------------------------------------------------------------------------------
+  cancelGroup                                                      cancel command group           
+--------------------------------------------------------------------------------------------------
+  executeJobOnServer jobName                                       executes on server             
+      -es (--execution-server) name                                execution [virtual] server name 
+      -jv (--job-version) version                                  chooses a job version          
+      -jc (--job-context) context name                             chooses a job context          
+      -jcp (--job-context-param) key=value [key=value ...]         provides a job context param   
+      -jsp (--job-statistics-port) port                            setup the statistics port      
+      -jtp (--job-trace-port) port                                 setup the trace port           
+      -jactc (--job-apply-context-to-children)                     apply context to children      
+      -useSSL (--use-ssl-option)                                   use ssl Protocol or not        
+      -un (--jobserver-username) username                          jobserver username             
+      -pd (--jobserver-password) password                          jobserver password             
+      -jrrd (--job-result-destination-dir) jobResultDestDir        job execution result  destination dir 
+      -jall (--job-log4j-level) level                              log4j level                    
+      -ra (--run-as-user) runas                                    run as user                    
+--------------------------------------------------------------------------------------------------
+  deployJobToServer jobName                                        Deploy job to server           
+      -es (--execution-server) name                                execution [virtual] server  name    
+      -jv (--job-version) version                                  chooses a job version          
+      -jc (--job-context) context name                             chooses a job context          
+      -jactc (--job-apply-context-to-children)                     apply context to children      
+      -useSSL (--use-ssl-option)                                   use ssl Protocol or not        
+      -un (--jobserver-username) username                          jobserver username             
+      -pd (--jobserver-password) password                          jobserver password             
+      -jall (--job-log4j-level) level                              log4j level                    
+      -sp (--statistics-port) port                                 statistics port                
+      -tp (--trace-port) port                                      trace port                     
+--------------------------------------------------------------------------------------------------
+  createProject                                                    creates a project              
+      -pn (--project-name) technical name                          project name                   
+      -pd (--project-description) description                      project description            
+      -pl (--project-language) language (java/perl)                project language               
+      -pa (--project-author) author login                          project author (email)         
+      -pap (--project-author-password) password                    password of author             
+--------------------------------------------------------------------------------------------------
+  createTask taskName                                                                             
+      -pn (--project-name) project name                            project name                   
+      -d (--description) description                               project description            
+      -a (--active)                                                active                         
+      -b (--project-branch) branch name                            project branch                 
+      -jn (--job-name) job name                                    job name                       
+      -jv (--job-version) job version                              job-version                    
+      -jc (--job-context) job context                              job-context                    
+      -jactc (--job-apply-context-to-children)                     apply context to children      
+      -rjc (--regenerate-job-on-change)                            regenerate job on change       
+      -esn (--excution-server) execution server                    execution server               
+      -ouj (--on-unavailable-jobserver) on unavailable jobserver                                  
+      -ese (--execStatisticsEnabled)                               statistic enable               
+      -asce (--add-statistics-code-enable)                         enabled statistics code        
+      -ousj (--on-unknown-state-job) unknown state job             provide the unknown state job  
+--------------------------------------------------------------------------------------------------
+  exportAsCWM dbConnectionName                                     export a db metadata as CWM    
+      -dd (--destination-directory) path                           destination directory          
+--------------------------------------------------------------------------------------------------
+  checkAndUpdate                                                   update from archiva server     
+                                                                   which returnd by a specific    
+                                                                   TAC                            
+      -tu (--tac-user-name) user                                   name of a tac user             
+      -tup (--tac-user-password) password                          password of a tac user         
+--------------------------------------------------------------------------------------------------
+  publishJob jobName                                               publish job to Artifact        
+                                                                   Repository                     
+      -r (--artifact-repository) url                               artifact repository            
+      -u (--username) username                                     username                       
+      -p (--password) password                                     password                       
+      -v (--version) version                                       chooses a job version          
+      -pv (--publish-version) version                              chooses a publish version      
+      -g (--group) group                                           chooses a job group            
+      -a (--artifactId) artifactId                                 published artifactId           
+      -s (--snapshot)                                              publish as SNAPSHOT version    
+      -t (--type) exportType                                       set export type, can be [osgi  
+                                                                   | standalone (or std)]; osgi by default 
+      -jc (--job-context) contextName                              specify which job context you  
+                                                                   want to use through inputing   
+                                                                   the job context name           
+      -jactc (--job-apply-context-to-children)                     specify this parameter if you  
+                                                                   want to apply context to       
+                                                                   children                       
+--------------------------------------------------------------------------------------------------
+  buildProjectSources                                              Build the source code of all   
+                                                                   the jobs                       
+      -if (--item-filter) filterExpr                               item filter expression         
+      -dv (--deploy-version) version                               deploy version                 
+--------------------------------------------------------------------------------------------------
+  changeMavenVersion maven-version                                 Change Maven version of jobs   
+      -s (--subjobs)                                               Include all sub jobs           
+      -if (--item-filter) filterExpr                               item filter expression         
+--------------------------------------------------------------------------------------------------
+  migrationCheck                                                   Migration check for upgrade    
+                                                                   safe guarding                  
+      -dp (--data-path) dataPath (dir)                             a valid dir to save migration  
+                                                                   check data                     
+--------------------------------------------------------------------------------------------------
+  executeReport                                Execute reports                
+      -n (--name) name                         Report names                   
+      -p (--path) path                         Report file pathes (relative   
+                                               path, e.g. /Project/TDQ_Data    Profiling/Reports/File).       
+      -pc (--report-context) context name      chooses a report context       
+--------------------------------------------------------------------------------------------------
+ Copyright (C) 2006-2016 Talend - www.talend.com                                                  
+
+--------------------------------------------------------------------------------------------------
+tale
