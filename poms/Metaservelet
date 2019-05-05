@@ -1,0 +1,268 @@
+Metaservelet
+
+/Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes⁩/MetaServletCaller.sh
+
+
+you first need to encode your <User Request> (JSON arguments) in Base64
+
+http://localhost:8780/tac641/metaServlet?eyJhY3Rpb25OYW1lIjoiaGVscCIsImNvbW1hbmROYW1lIjoidXNlckV4aXN0In0=
+
+
+openssl base64 -in scripts.sh -out scripts.sh64
+
+
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes⁩/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -help all
+
+
+
+<tomcat_path>\webapps\org.talend.administrator\WEB-INF\classes>MetaServletCaller.bat 
+--tac-url=http://localhost:8080/org.talend.administrator/ -help all > tac-help.txt
+
+<tomcat_path>\webapps\org.talend.administrator\WEB-INF\classes>MetaServletCaller.bat 
+--tac-url=http://localhost:8080/org.talend.administrator/ -h > tac-help-short.txt
+
+
+
+runTask based on its ID
+
+<tomcat_path>\webapps\org.talend.administrator\WEB-INF\classes>MetaServletCaller.bat 
+--tac-url=http://localhost:8080/org.talend.administrator/ -help runTask
+
+----------------------------------------------------------
+  Command: runTask
+----------------------------------------------------------
+Description             : Allows to run a task defined in Job conductor by its id. 
+Mode can be 'asynchronous' or 'synchronous'
+Requires authentication : true
+Since                   : 4.2
+Sample                  :
+{
+  "actionName": "runTask",
+  "authPass": "admin",
+  "authUser": "admin@company.com",
+  "jvmParams": [
+    "-Xmx256m",
+    "-Xms64m"
+  ],
+  "mode": "synchronous",
+  "taskId": 1
+}
+
+
+
+getTaskIdByName
+
+<tomcat_path>\webapps\org.talend.administrator\WEB-INF\classes>MetaServletCaller.bat --tac
+-url=http://localhost:8080/org.talend.administrator/ -help getTaskIdByName
+
+
+----------------------------------------------------------
+  Command: getTaskIdByName
+----------------------------------------------------------
+Description             : Get task id by given taskName
+Requires authentication : true
+Since                   : 5.1
+Sample                  :
+{
+  "actionName": "getTaskIdByName",
+  "authPass": "admin",
+  "authUser": "admin@company.com",
+  "taskName": "task1"
+}
+
+
+{
+  "actionName": "getTaskIdByName",
+  "authPass": "socgen",
+  "authUser": "cicd@gen.com",
+  "taskName": "job1"
+}
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -v -json runtaskJob1.json
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -v --json-params={"actionName":"getTaskIdByName","authPass":"socgen","authUser":"cicd@gen.com","taskName":"job1"}  
+
+http://localhost:8780/tac641/metaServlet?ewoKICAiYWN0aW9uTmFtZSI6ICJnZXRUYXNrSWRCeU5hbWUiLAogICJhdXRoUGFzcyI6ICJzb2NnZW4iLAogICJhdXRoVXNlciI6ICJjaWNkQGdlbi5jb20iLAogICJ0YXNrTmFtZSI6ICJqb2IxIgp9Cg==
+
+{
+"executionTime": {
+"millis": 1,
+"seconds": 0
+},
+"returnCode": 0,
+"taskId": 42
+}
+
+
+
+execute getTaskIdByName
+
+
+
+Invoking the Talend Administration Center API programmatically
+
+
+
+
+Deploy a job on tac
+
+ sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -json='{"actionName":"taskLog","taskId":42,"authPass":"socgen","authUser":"cicd@gen.com"}'
+ 
+
+
+
+
+***************
+
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -json="{'actionName':'associatePreGeneratedJob','active':true,'authUser':'cicd@gen.com','authPass':'socgen','description':the first task I created','executionServerName':'job_server_1','filePath':'job123','importType':'Nexus','logLevel':'Info','addStatisticsCodeEnabled':true,'nexusArtifactId':'talendcicd','nexusGroupId':'org.talend.publish','nexusRepository':'talend-releases','nexusVersion':'2.0.1-SNAPSHOT','pauseOnError':false,'taskName':'task1','timeout':3600,'onUnknownStateJob':'WAIT','taskType':'Artifact'}"
+
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh -url=http://localhost:8780/tac641  '-json={
+"actionName": "associatePreGeneratedJob",
+"active": true,
+'authUser':'cicd@gen.com','authPass':'socgen',
+"description": "jobMasterSourcetoDSA",
+"executionServerName": "job_server_1",
+"filePath": "/Users/hadoop/talend_build/target/cicd.zip",
+"onUnknownStateJob": "WAIT",
+"taskName": "jobMasterSourcetoDSA"}'
+
+{"executionTime":{"millis":617,"seconds":0},"returnCode":0}
+
+{"error":"Can't create the task 'jobMasterSourcetoDSA' because it already exists.","returnCode":5}
+
+'filePath':'job123',
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 "-json={'actionName':'associatePreGeneratedJob',
+'active':true,
+'authUser':'cicd@gen.com',
+'authPass':'socgen',
+'description':the first task I created',
+'executionServerName':'job_server_1',
+'importType':'Nexus',
+'logLevel':'Info',
+'addStatisticsCodeEnabled':true,
+'nexusArtifactId':'talendcicd',
+'nexusGroupId':'org.talend.publish',
+'nexusRepository':'talend-releases',
+'nexusVersion':'2.0.1-SNAPSHOT',
+'pauseOnError':false,'taskName':'task1',
+'timeout':3600,
+'onUnknownStateJob':'WAIT',
+'taskType':'Artifact'}"
+
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 '-json={
+  "actionName": "associatePreGeneratedJob",
+  "active": true,
+ "authUser":"cicd@gen.com",
+"authPass":"socgen",
+  "description": "task1 s description",
+  "executionServerName": "job_server_1",
+  "filePath": "HelloWorld",
+  "importType": "Nexus",
+  "logLevel": "Info",
+"nexusArtifactId":"talendcicd",
+"nexusGroupId":"org.talend.publish",
+"nexusRepository":"talend-releases",
+"nexusVersion":"2.0.1-SNAPSHOT",
+  "onUnknownStateJob": "WAIT",
+  "pauseOnError": false,
+  "taskName": "PYTHONTASK",
+  "timeout": 3600,
+  "contextName":"Dev","logLevel"="Debug"
+  }'
+
+Did you try to replace "importType":"Nexus" by "importType":"File"?
+
+
+CommandLine script to buildjob:
+initRemote http://10.14.200.109:8080/org.talend.administrator -ul xxx@xxx -up xxxxxx
+logonProject -pn FIREWATCH -br test3
+buildJob jobMasterSourcetoDSA -dd /usr/local/jenkins/workspace/BranchTestSVN_export/
+
+
+
+
+
+
+Command to create a task: associatePreGeneratedJob
+
+nexusRepository: use this, if the task is created from Nexus, use the following parameters: nexusRepository/nexusGroupId/nexusArtifactId/nexusVersion[/nexusJobVersionSuffix].
+
+nexusJobVersionSuffix]: [Optional] use this, when a Job in Nexus is named like, test-1.0.0-20170516.043751-1.zip.
+
+taskType: [Optional] use this, to distinguish taskType: Normal or Artifact, the default value is Normal.
+
+importType: use this, to select the position of the .zip file, from either Nexus or File, the default value is File.
+
+{
+ "actionName": "associatePreGeneratedJob",
+ "active": true,
+ "authPass": "admin",
+ "authUser": "admin@company.com",
+ "contextName": "Default",
+ "description": "task1's description",
+ "executionServerName": "serv1",
+ "importType": "Nexus",
+ "logLevel": "Info",
+ "nexusArtifactId": "test",
+ "nexusGroupId": "org.example",
+ "nexusJobVersionSuffix": "1.0.0-20170516.043751-1",
+ "nexusRepository": "snapshots",
+ "nexusVersion": "0.1.0-SNAPSHOT",
+ "onUnknownStateJob": "WAIT",
+ "pauseOnError": false,
+ "taskName": "task1",
+ "taskType": "Artifact",
+ "timeout": 3600
+}
+
+
+
+
+Command to update a task: updateTask
+
+nexusRepository: use this, if the task is updated from Nexus, use the following parameters nexusRepository/nexusGroupId/nexusArtifactId/nexusVersion[/nexusJobVersionSuffix] like the AssociatePreGeneratedJob command.
+
+nexusJobVersionSuffix: [Optional] use this, when a Job in Nexus is named like, test-1.0.0-20170516.043751-1.zip.
+
+Notice: as this command is for File, Nexus, SVN, and Git: use this, to decide which one by parameter (filePath > nexusRepository > ...) exists or not.
+
+ 
+
+Sample:
+
+{
+ "actionName": "updateTask",
+ "active": true,
+ "applyContextToChildren": false,
+ "authPass": "admin",
+ "authUser": "admin@company.com",
+ "branch": "trunk",
+ "contextName": "Default",
+ "description": "task1 for extracting data from DB1",
+ "execStatisticsEnabled": false,
+ "executionServerName": "serv1",
+ "jobName": "job1",
+ "jobVersion": "1.0",
+ "logLevel": "Info",
+ "nexusArtifactId": "test",
+ "nexusGroupId": "org.example",
+ "nexusJobVersionSuffix": "1.0.0-20170516.043751-1",
+ "nexusRepository": "snapshots",
+ "nexusVersion": "0.1.0-SNAPSHOT",
+ "onUnknownStateJob": "WAIT",
+ "pauseOnError": false,
+ "projectName": "tproject1",
+ "regenerateJobOnChange": false,
+ "taskId": 1,
+ "taskName": "task1",
+ "timeout": 3600
+}
+
+
+
+
