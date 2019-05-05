@@ -1,0 +1,219 @@
+commandline
+
+https://help.talend.com/reader/RK~CAb9nJ1erxR8SrBbKoQ/w9WipT881wISUB7x1sPkAQ
+
+
+https://help.talend.com/reader/RK~CAb9nJ1erxR8SrBbKoQ/jmVeF60yi8PNWJSuZn4ChA
+
+
+Generating a Job created with a Job creation API using the CommandLine.
+https://help.talend.com/reader/RK~CAb9nJ1erxR8SrBbKoQ/V4~dKusAEO8zrDlEtxPXqg
+
+Executing a Job on a server with SSL enabled using the CommandLine.
+https://help.talend.com/reader/RK~CAb9nJ1erxR8SrBbKoQ/wcHVgAQ78hh1N8QzWP6Brw
+
+Building a Job using the CommandLine.
+https://help.talend.com/reader/RK~CAb9nJ1erxR8SrBbKoQ/NyepCYRbzyXdeVC84Tdj4Q
+
+Publishing a Service, a Route or a data service Job into an Artifact repository using the CommandLine.
+https://help.talend.com/reader/RK~CAb9nJ1erxR8SrBbKoQ/G16ldv8Odrs0Pja5MQmoQg
+
+
+
+the name of the Talend Studio executable corresponding to your OS, for example: ./Talend-Studio-linux-gtk-x86
+
+operating options, for example:
+
+-nosplash, no interface is displayed.
+
+-application org.talend.commandline.CommandLine, the application is launched in commandline mode.
+
+-consoleLog, the logs are displayed in the console.
+
+-data commandline-workspace, specify the path and name of the commandline workspace.
+
+the operating mode, for example: startServer -p 8002
+
+
+
+
+run your CommandLine in background on Linux
+
+Add the --disableShellInput command.
+
+./Talend-Studio-linux-gtk-x86 --disableShellInput -nosplash
+-application org.talend.commandline.CommandLine -consoleLog -data commandline-workspace
+startServer -p 8002
+
+
+./commandline.sh &
+
+
+
+Operating modes:
+
+CommandLine has three operating modes accessible from the standalone/basic mode:
+
+Shell mode, see Shell mode:
+./Talend-Studio-linux-gtk-x86 -nosplash -application org.talend.commandline.CommandLine
+-consoleLog -data commandline-workspace shell
+
+
+Standalone/Basic mode: This mode allows you to execute a single command. it switches off after executing all commands passed on through the list of arguments.
+./Talend-Studio-linux-gtk-x86 -nosplash -application org.talend.commandline.CommandLine
+-consoleLog -data commandline-workspace help
+
+
+Server mode, see Server mode.
+
+./Talend-Studio-linux-gtk-x86 -nosplash -application org.talend.commandline.CommandLine
+-consoleLog -data commandline-workspace startServer -p 8002
+
+echo "stopServer" | telnet localhost 8002
+
+to access cmdline shell
+telnet localhost 8002
+
+
+
+Script mode, see Script mode.
+./Talend-Studio-linux-gtk-x86 -nosplash -application org.talend.commandline.CommandLine
+-consoleLog -data commandline-workspace scriptFile /tmp/myscript
+
+--disableLocalMode  only help and initRemote are allowed
+
+script file 
+initRemote http://localhost:8888/org.talend.administrator -ul admin@company.com -up passwd
+logonProject -pn myProject
+exportItems /tmp/myitems.zip
+
+
+
+Generating a Job created with a Job creation API using the CommandLine
+
+initRemote http://localhost:8080/org.talend.administrator -ul admin@company.com -up admin
+or initLocal
+
+listProject -b
+logonProject -pn di_project -ul admin@company.com -up admin -br branches/v1.0.0
+
+createJob NameOfJob -sf path\yourJobscript.jobscript
+
+job created in commandline-workspace\YourProjectName\process.
+
+The creation of job scripts and the generation of its corresponding Job design can also be done from Talend Studio which provides a user-friendly Job script API Editor. For more information on Job script creation, see the Talend Studio User Guide.
+
+
+
+Building a Job using the CommandLine:
+
+initRemote http://localhost:8080/org.talend.administrator -ul admin@company.com -up admin
+initLocal
+
+listProject -b
+logonProject -pn di_project -ul admin@company.com -up admin -br branches/v1.0.0
+
+setUserComponentPath -up C:/components  (optional)
+
+buildJob MyJob -dd C:/tac/builds -af MyJob_0.1 -jc Default -jv 0.1
+
+MyJob is built in the archive named MyJob_0.1.zip, in the C:/tac/builds folder
+
+The best practice is to put the archive file in the Job archive folder, which path is defined in the Job Conductor node of the Configuration page.
+
+
+Publishing a Service, a Route or a data service Job into an Artifact repository using the CommandLine:
+
+initRemote http://localhost:8080/org.talend.administrator -ul admin@company.com -up admin
+initLocal
+
+listProject -b 
+
+logonProject -pn di_project -ul admin@company.com -up admin -br branches/v1.0.0
+
+
+publishService serviceName --version 0.1 --group myGroup --artifactId myService --publish-version 0.1 
+--artifact-repository http://localhost:8081/nexus/content/repositories/releases/ --username admin --password admin123
+
+same way for 
+publishRoute or publishJob command
+
+
+For examples of use, see:
+
+Using Scripts to Call MetaServlet Actions.
+
+Using MetaServlet to print the log file of a task.
+
+Running a task with context parameters using MetaServlet.
+
+Executing a task and returning its status using MetaServlet.
+
+Using MetaServlet to handle ESB execution tasks.
+
+
+Parameters and actions in metaServlet
+
+JSON parameters used in metaServlet:
+
+"actionName":"taskLog"
+"active":true
+"addStatisticsCodeEnabled":true
+"applyContextToChildren":true
+"authUser":"admin@company.com"
+"authPass":admin"
+"branch":trunk"
+"contextName":"var1"
+"description":the first task I created"
+"execStatisticsEnabled":true
+"executionServerName":job_server_1"
+"jobName":job_1"
+"jobVersion":"1.0"
+"onUnknownStateJob":KILL_TASK", "WAIT"
+"projectName":"project1"
+"regenerateJobOnChange":true or false
+"taskName":"task1"
+"taskId":1
+"mode":"synchronous" or "asynchronous"
+"lable":for_demo_only"
+"source":"branchesource_name"
+"target":"branchtarget_name"
+"username":"usernameA"
+"password":"passwordA"
+"id":1
+
+
+
+{"actionName":"taskLog",
+"active":true,
+"addStatisticsCodeEnabled":true,
+"applyContextToChildren":true,
+"authUser":"admin@company.com",
+"authPass":admin",
+"branch":trunk",
+"contextName":"var1",
+"description":the first task I created",
+"execStatisticsEnabled":true,
+"executionServerName":job_server_1",
+"jobName":job_1",
+"jobVersion":"1.0",
+"onUnknownStateJob":KILL_TASK", "WAIT",
+"projectName":"project1",
+"regenerateJobOnChange":true or false,
+"taskName":"task1",
+"taskId":1,
+"mode":"synchronous" or "asynchronous",
+"lable":for_demo_only",
+"source":"branchesource_name",
+"target":"branchtarget_name",
+"username":"usernameA",
+"password":"passwordA",
+"id":1}
+
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -json="{"actionName":"associatePreGeneratedJob","active":true,"authUser":"cicd@gen.com","authPass":"socgen","description":the first task I created","executionServerName":"job_server_1","filePath":"job123","importType":"Nexus","logLevel":"Info","addStatisticsCodeEnabled":true,"nexusArtifactId":"talendcicd","nexusGroupId":"org.talend.publish","nexusRepository":"talend-releases","nexusVersion":"2.0.1-SNAPSHOT","onUnkownStateJob":"WAIT","pauseOnError":false,"taskName":"task1","timeout":3600}'
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -json='{"actionName":"associatePreGeneratedJob","active":true,"authUser":"cicd@gen.com","authPass":"socgen","description":"the first task I created","executionServerName":"job_server_1","filePath":"job123","importType":"Nexus","logLevel":"Info","addStatisticsCodeEnabled":true,"nexusArtifactId":"talendcicd","nexusGroupId":"org.talend.publish","nexusRepository":"talend-releases","nexusVersion":"2.0.1-SNAPSHOT","onUnkownStateJob":"WAIT","pauseOnError":false,"taskName":"task1","timeout":3600}' 
+
+
+sh /Users/hadoop/apache-tomcat-7.0.91/webapps/tac641/WEB-INF/classes/MetaServletCaller.sh --tac-url=http://localhost:8780/tac641 -json={"actionName": "associatePreGeneratedJob","active": true,"authPass":"admin","authUser":"admin@company.com","contextName":"Default","description": "task1 s description","executionServerName":"serv1","filePath":"'/home/talend/generatedJob.zip'","importType": "Nexus",  "logLevel": "Info","nexusArtifactId": "test","nexusGroupId":"org.example","nexusJobVersionSuffix":"1.0.0-20170516.043751-1","nexusRepository":"snapshots","nexusVersion":"0.1.0-SNAPSHOT","onUnknownStateJob":"WAIT","pauseOnError":false,"taskName":"task1","taskType":"Artifact","timeout": 3600}
