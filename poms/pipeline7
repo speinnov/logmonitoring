@@ -1,0 +1,192 @@
+
+talendPipelineScript
+
+
+https://github.com/speinnov/jenkins.git
+maven/pom.xml
+
+/configuration/.m2/repository
+
+/Users/hadoop/TalendStudio-6.4.1_TIS/studio/configuration/.m2/settings.xml
+
+/Users/hadoop/talend_builder/JENKINS_HOME/workspace/talend_build/projects
+
+
+org.talend:ci.builder:6.4.1:generate -e -X
+
+-Dcommandline.workspace=/Users/hadoop/talend_builder/JENKINS_HOME/workspace/talend_build/projects
+-Dcommandline.host=macbookprobigdata.local
+-Dcommandline.port=8002
+-Dcommandline.user=jobbuilder@talend.com
+-DprojectsTargetDirectory=/Users/hadoop/talend_builder/JENKINS_HOME/workspace/talend_runtests/projectSources
+
+-DaltDeploymentRepository=tac::default::http://macbookprobigdata.local:8181/nexus/content/repositories/talend-snapshots/
+
+
+-DitemFilter=${JobitemFilter}
+-Ddeploy.version=${ArtifactVersion}
+-ea
+-Xms512m
+-Xmx1300m
+-XX:+CMSClassUnloadingEnabled
+-XX:MinHeapFreeRatio=10
+-XX:MaxHeapFreeRatio=20
+-XX:+HeapDumpOnOutOfMemoryError
+
+/Users/hadoop/talend_builder/JENKINS_HOME
+
+⁨/Users/hadoop/talend_builder/JENKINS_HOME/workspace/talend_runtests/projectSources/pom.xml
+
+/Users/hadoop/talend_builder/Talend-CI-Builder-20170623_1246-V6.4.1/JENKINS_HOME/workspace/talend_buildsource/
+
+${cmdm_ProjectRoot}maven/maven_user_settings.xml
+
+
+*******$
+ <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.1</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.5.1</version>
+          <executions>
+            <execution>
+              <id>default-deploy</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <serverId>nexus</serverId>
+            <nexusUrl>http://localhost:8181/nexus/</nexusUrl>
+            <skipStaging>true</skipStaging>
+          </configuration>
+        </plugin>
+
+    *********
+       <distributionManagement>
+         <repository>
+            <id>talend-releases</id>
+            <url>http://macbookprobigdata.local:8181/nexus/content/repositories/talend-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>talend-snapshots</id>
+            <url>http://macbookprobigdata.local:8181/nexus/content/repositories/talend-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+
+
+
+
+
+pipeline {
+	agent any
+
+	stages {
+		stage('build'){
+
+			steps{
+				withMaven(maven: 'MVN353'){
+
+				sh 'mvn clean compile -f ./mvn_project/pom.xml -X'
+				} 
+				
+			}
+		}
+		stage('test'){
+			steps{
+			withMaven(maven: 'MVN353'){
+					sh 'mvn test -X'
+					//junit 'reports/**/*.xml'
+				}
+			}
+		}
+		stage('Deploy'){
+			steps{
+				withMaven(maven: 'MVN353'){
+
+					sh 'mvn clean deploy -Dmaven.test.skip=true -f mvn_prj/pom.xml -s mvn_prj/conf/settings.xml '
+				}			
+			}
+		}
+
+	}
+
+
+}
+
+
+
+
+***
+pipelineScript
+
+node {
+    stage 'Run Jmeter test'
+    sh 'sh /Users/hadoop/apache-jmeter-5.0/bin/jmeter -n -t  /Users/hadoop/apache-jmeter-5.0/Mytests/commandlineTests.jmx -l  /Users/hadoop/apache-jmeter-5.0/Mytests/commandlineTestsresult.jtl'
+ }
+https://github.com/speinnov/jenkins.git
+
+
+*****
+
+
+node {
+    stage 'Run Jmeter test'
+sh 'sh /Users/hadoop/apache-jmeter-5.0/bin/jmeter -n -t  /Users/hadoop/apache-jmeter-5.0/Mytests/commandlineTests.jmx -l  /Users/hadoop/apache-jmeter-5.0/Mytests/commandlineTestsresult.txt'
+ }
+
+to publish result Jmeter in file
+ stage:([$class:'ArtifactArchiver' artifacts:'**/*.jtl'])
+
+to store logs 
+  stage:([$class:'ArtifactArchiver' artifacts:'**/*.jtl','**/jmeter.log'])
+
+
+node {
+    stage 'Run Jmeter test'
+sh 'sh /Users/hadoop/apache-jmeter-5.0/bin/jmeter -n -t  /Users/hadoop/apache-jmeter-5.0/Mytests/commandlineTests.jmx -l  /Users/hadoop/apache-jmeter-5.0/Mytests/commandlineTestsresult.txt'
+
+// store result into jtl file
+//step:([$class:'ArtifactArchiver' , artifacts:'**/*.jtl'])
+
+//to store logs 
+  step:([$class:'ArtifactArchiver' , artifacts:'**/*.jtl,**/jmeter.log'])
+  //or
+  step:([$class:'ArtifactArchiver' , artifacts:'Test.html', finguerprint:true])
+  
+ }
+
+
+
+
+/Users/hadoop⁩/TalendStudio-6.4.1_TIS⁩/studio⁩/Talend-Studio-macosx-cocoa.app⁩/Contents⁩/MacOS⁩/commandline-workspace⁩
+
+node {
+	def mvnHome
+	stage('Preparation'){
+		//get code from github
+		git 'https://github.com/speinnov/jenkins.git'
+		// get the maven tools
+		envHome= tool 'M3'
+
+	}
+	stage('Builkd'){
+		//run mvn build
+		if(isUnix()){
+			sh "'${mvnHome}/bin/mvn' -Dmaven.text.failure.ignore clean package"
+		}else{
+		
+		}
+	}
+
+}
