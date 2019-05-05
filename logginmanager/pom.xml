@@ -42,6 +42,7 @@
     <!--
     <baseNexusURL>${baseNexusURL}</baseNexusURL>
   -->
+    <targetRepositoryID2>talend-snapshots</targetRepositoryID2>
     <targetRepositoryID>talend_snapshots</targetRepositoryID>
     <package.final.name>${project.artifactId}</package.final.name>
     <!-- Le nom "public" de l'application -->
@@ -291,10 +292,11 @@
                            <version>${project.version}</version>
                            <packaging>${project.packaging}</packaging>
                            <generatePom>true</generatePom>
-                           <repositoryId>${targetRepositoryID}</repositoryId>
-                           <url>${baseNexusURL}/content/repositories/${targetRepositoryID}</url>
+                           <repositoryId>${targetRepositoryID2}</repositoryId>
+                           <!--url>${baseNexusURL}/content/repositories/${targetRepositoryID}</url-->
+                           <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/${targetRepositoryID}</url>
                            <sources>${project.build.directory}/${project.build.finalName}-sources.jar</sources>
-                           <pomFile>pom.xml</pomFile>
+                           <!--pomFile>pom.xml</pomFile-->
 
 
 
