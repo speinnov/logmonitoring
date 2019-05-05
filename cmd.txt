@@ -1,0 +1,233 @@
+direct:
+
+curl -v -u admin:Talend123 --upload-file pom.xml
+http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots/com/speinnov/tools/monitoring/1.1-SNAPSHOT/logginmanager_1.1-SNAPSHOT.pom
+
+
+Maven "deploy-file" Deployment:
+
+mvn deploy:deploy-file -DgroupId=com.speinnov.tools.monitoring -DartifactId=logginmanager -Dversion=1.1-SNAPSHOT -DgeneratePom=true -Dpackaging=jar
+-DrepositoryId=talend-snapshots -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots -Dfile=target/logginmanager-1.1-SNAPSHOT.jar
+
+With a pom file:
+./
+
+This plugin goal also allows deployment of snapshot versions, and the plugin will take care of calculating the timestamped version needed:
+
+
+resultat
+/com/speinnov/tools/monitoring/logginmanager/1.1-SNAPSHOT/logginmanager-1.1-20190501.130528-1.jar
+
+
+
+
+REST API Upload
+Alternatively you can use the REST API.  This requires a multi-part form POST to /service/local/artifact/maven/content.
+
+Here are some examples using curl.
+
+1) Uploading an artifact and generating a pom file:
+
+curl -v -F r=releases -F hasPom=false -F e=jar -F g=com.test -F a=project -F v=1.0 -F p=jar -F file=@project-1.0.jar
+-u admin:Talend123 http://localhost:8081/nexus/service/local/artifact/maven/content
+
+http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots
+
+
+2) Uploading an artifact with a pom file:
+
+curl -v -F r=releases -F hasPom=true -F e=jar -F file=@pom.xml -F file=@project-1.0.jar -u admin:admin123 http://localhost:8081/nexus/service/local/artifact/maven/content
+
+ >>>>>>
+curl -v -F r=talend_snapshots -F hasPom=true -F e=jar -F file=@pom.xml -F file=@target/logginmanager-1.1-SNAPSHOT.jar -u admin:Talend123 http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots
+
+http://vps40346.lws-hosting.com:8888/nexus/service/local/artifact/maven/content
+
+With a pom file:
+mvn deploy:deploy-file -DgeneratePom=false -DrepositoryId=talend-snapshots -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots
+-DpomFile=pom.xml -Dfile=target/logginmanager-1.1-SNAPSHOT.jar
+
+3) Uploading a pom file by itself (with no artifact):
+
+curl -v -F r=releases -F hasPom=true -F file=@pom.xml -u admin:admin123 http://localhost:8081/nexus/service/local/artifact/maven/content
+Important: The file parameters MUST COME LAST or the curl commands will not work. If you are uploading a pom file, then the pom file parameter must come before the rest of the file parameters, but after all the other parameters.
+For reference, here are all the available form parameters for this endpoint:
+
+UPLOAD FILE ZIP
+
+
+curl --upload-file logginmanager-1.1-20190501.130838-2.zip -u admin:admin123 -v http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots/content-compressed/
+
+
+
+
+ mvn -f pom.xml "-D-Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots" -D-Dfile=logginmanager/target/logginmanager-1.4.jar "-D-DpomFile=pom.xml " "-D-DrepositoryId=talend-snapshots " "-D-DgeneratePom=false " deploy:deploy-file
+
+
+
+
+ mvn deploy:deploy-file \
+ -DgroupId=com.speinnov.tools.monitoring -DartifactId=logginmanager \
+ -Dversion=1.4 \
+ -DgeneratePom=true  \
+ -Dpackaging=jar  \
+ -DrepositoryId=talend-snapshots \
+ -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots \
+ -Dfile=logginmanager/target/logginmanager-1.5.jar
+
+
+ mvn deploy:deploy-file \
+ -DgroupId=com.speinnov.tools.monitoring -DartifactId=logginmanager \
+ -Dversion=1.4 \
+ -DgeneratePom=true  \
+ -Dpackaging=jar  \
+ -DrepositoryId=talend-snapshots \
+ -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots \
+ -Dfile=target/logginmanager-1.5.jar
+
+
+
+
+ mvn clean install  deploy:deploy-file \
+ -DgeneratePom=false \
+ -DrepositoryId=talend-snapshots \
+ -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots  \
+ -DpomFile=pom.xml \
+ -Dfile=target/logginmanager-1.5-SNAPSHOT.jar
+
+ mvn deploy:deploy-file \
+ -DgeneratePom=false \
+ -DrepositoryId=talend-snapshots \
+ -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots  \
+ -DpomFile=logginmanager/pom.xml \
+ -Dfile=logginmanager/target/logginmanager-1.5-SNAPSHOT.jar
+
+mvn deploy:deploy-file@deploy-file \
+ -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots  \
+ -Dfile=logginmanager/target/logginmanager-1.5-SNAPSHOT.jar
+ 
+
+update version
+
+
+mvn versions:set -DnewVersion=1.1-SNAPSHOT
+mvn clean install
+
+deployed
+
+ mvn release:perform -P auth
+ cd target/checkout
+ mvn clean deploy
+
+
+mvn clean deploy -f logginmanager/pom.xml -Dmaven.test.skip=true
+
+mvn deploy:deploy-file  -DgeneratePom=false  -DrepositoryId=talend-snapshots  -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots   -DpomFile=pom.xml  -Dfile=target/logginmanager-1.5-SNAPSHOT.jar
+
+mvn clean -flogginmanager/pom.xml
+
+mvn clean install -flogginmanager/pom.xml
+
+mvn deploy:deploy-file@deploy-file  \
+-DgeneratePom=false  \
+-DrepositoryId=talend-snapshots  \
+-Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots   \
+-DpomFile=logginmanager/pom.xml  \
+-Dfile=logginmanager/target/logginmanager-1.5-SNAPSHOT.jar
+
+
+
+/var/lib/apache-maven/bin/mvn
+"-D-Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots
+" -D-Dfile=logginmanager/target/logginmanager-1.5-SNAPSHOT.jar
+"-D-DpomFile=logginmanager/pom.xml  " "-D-DrepositoryId=talend-snapshots  " "-D-DgeneratePom=false
+
+
+
+
+/var/lib/apache-maven/bin/mvn -f logginmanager/pom.xml -s /var/lib/jenkins/workspace/log-monitoring-deploy/settings.xml clean install
+
+
+
+<modelVersion>4.0.0</modelVersion>
+    <groupId>com.hp.Maven</groupId>
+    <artifactId>Maven-Nexus</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+
+    <properties>
+        <baseNexusURL>${baseNexusURL}</baseNexusURL>
+        <targetRepositoryID>${repositoryId}</targetRepositoryID>
+        <package.final.name>${project.artifactId}</package.final.name>
+    </properties>
+    
+<build>
+       <plugins>
+           <plugin>
+               <artifactId>maven-deploy-plugin</artifactId>
+               <version>2.8.2</version>
+               <executions>
+                   <execution>
+                       <id>default-deploy</id>
+                       <configuration>
+                           <skip>true</skip>
+                       </configuration>
+                   </execution>
+                   <execution>
+                       <id>deploy-node-modules-artifact</id>
+                       <phase>deploy</phase>
+                       <goals>
+                           <goal>deploy-file</goal>
+                       </goals>
+                       <configuration>
+                           <file>${file}</file>
+                           <groupId>${groupId}</groupId>
+                           <artifactId>${artifactId}</artifactId>
+                           <version>${version}</version>
+                           <packaging>${packaging}</packaging>
+                           <generatePom>true</generatePom>
+                           <repositoryId>${targetRepositoryID}</repositoryId>
+                           <url>${baseNexusURL}/content/repositories/${targetRepositoryID}</url>
+                       </configuration>
+                   </execution>
+               </executions>
+           </plugin>
+       </plugins>
+   </build>
+</project>
+
+
+goal deploy -batch-mode
+
+file=${file}
+groupId=${groupId}
+artifactId=${artifactId}
+version=${version}
+packaging=${packaging}
+repositoryId=${repositoryId}
+baseNexusURL=%baseNexusURL%
+
+
+
+http://vps40346.lws-hosting.com:8888/nexus
+
+
+/var/lib/jenkins/workspace/log-monitoring-mvn/logginmanager/pom.xml
+
+/var/lib/jenkins/workspace/log-monitoring-mvn/logginmanager/target/logginmanager-1.5-SNAPSHOT-sources.jar
+
+/var/lib/jenkins/workspace/log-monitoring-mvn/logginmanager/target/logginmanager-1.5-SNAPSHOT.jar
+
+/var/lib/jenkins/workspace/log-monitoring-mvn/logginmanager/pom.xml
+
+
+ mvn clean deploy -f logginmanager/pom.xml -Dmaven.test.skip=true
+ 
+ mvn deploy:deploy-file@deploy-file  -f logginmanager/pom.xml
+ mvn deploy:deploy-file@deploy-file  -Durl=http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots   -Dfile=logginmanager/target/logginmanager-1.5-SNAPSHOT.jar
+
+
+
+mvn deploy -Dmaven.deploy.skip=true -f logginmanager/pom.xml
+
+ 
