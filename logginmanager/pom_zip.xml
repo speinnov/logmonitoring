@@ -561,7 +561,9 @@
             </configuration>
            </plugin>
 -->
-
+<!--  ************************************************ -->
+<!--  *****************Release generation ************ -->
+<!--  ************************************************ -->
 
               <plugin>
                    <groupId>org.apache.maven.plugins</groupId>
@@ -578,9 +580,10 @@
                </plugin>
 
       </plugins>
+
     </pluginManagement>
     <!--finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName-->
-      <finalName>${project.artifactId}-${project.version}</finalName>
+      <finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
   </build>
 
   <!--connection>scm:git:http://${GIT_USERNAME}:${GIT_PASSWORD}@server.host.name/path/to/project.git</connection-->
