@@ -592,7 +592,7 @@
       <!--developerConnection>
            scm:git:https://github.com/speinnov/logmonitoring.git
       </developerConnection -->
-      <developerConnection>scm:git:ssh://hadoop@github.com/speinnov/logmonitoring.git</developerConnection>
+      <developerConnection>scm:git:ssh://${GIT_USERNAME}@github.com/speinnov/logmonitoring.git</developerConnection>
 
 
       <url>https://github.com/speinnov/logmonitoring</url>
