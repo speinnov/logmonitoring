@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+<!--
+  <parent>
+      <groupId>org.sonatype.buildsupport</groupId>
+      <artifactId>public-parent</artifactId>
+      <version>3</version>
+  </parent>
+-->
+  <groupId>com.speinnov.tools.monitoring</groupId>
+  <artifactId>logginmanager</artifactId>
+  <version>1.7-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>logginmanager</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+  <description>test deployment on Nexus</description>
+
+
+  <!-- =============================================================== -->
+  <!-- Propriétés -->
+  <!-- =============================================================== -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <junit.version>4.12</junit.version>
+  	<spring.version>5.1.6.RELEASE</spring.version>
+  	<log.api.version>2.11.2</log.api.version>
+    <baseNexusURL>http://vps40346.lws-hosting.com:8888/nexus</baseNexusURL>
+    <!--
+    <artifact.groupId>com.speinnov.tools.monitoring</artifact.groupId>
+    <artifact.artifactId>logginmanager</artifact.artifactId>
+    <artifact.version>1.0-SNAPSHOT</artifact.version>
+    <artifact.packaging>jar</artifact.packaging>
+    <artifact.fileName>logginmanager</artifact.fileName>
+  -->
+
+    <GIT_USERNAME>akhenouche@spectrum-innovation.com</GIT_USERNAME>
+    <GIT_PASSWORD>Spark2017</GIT_PASSWORD>
+    <!--
+    <baseNexusURL>${baseNexusURL}</baseNexusURL>
+  -->
+    <targetRepositoryID2>talend-snapshots</targetRepositoryID2>
+    <targetRepositoryID>talend_snapshots</targetRepositoryID>
+    <package.final.name>${project.artifactId}</package.final.name>
+    <!-- Le nom "public" de l'application -->
+    <application.name>${project.artifactId}</application.name>
+
+    <!-- Le format à utiliser pour afficher la date du build -->
+    <maven.build.timestamp.format>dd/MM/yyyy</maven.build.timestamp.format>
+    <!-- Propriété servant à contourner le bug du non remplacement
+         de la propriété maven.build.timestamp lors du filtrage des ressources -->
+    <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
+
+    <!--repositoryId>talend_releases</repositoryId-->
+
+
+    <!-- Required. Commandline application workspace and Studio path, only for
+    local(script) mode -->
+    <commandline.workspace>commandline_workspace_path</commandline.workspace>
+    <product.path>studio_path</product.path>
+    <!-- Optional. Specify target directory where generated sources will be stored -->
+    <projectsTargetDirectory>${basedir}/projectSources</projectsTargetDirectory> <!-- Optional. Specify version for the artifact to be built. Can be set for each Job
+    independently -->
+    <deploy.version>${project.version}</deploy.version>
+
+
+  </properties>
+
+
+
+
+
+  <dependencies>
+
+    <!-- https://mvnrepository.com/artifact/org.sonatype.nexus/nexus-plugin-api -->
+<dependency>
+    <groupId>org.sonatype.nexus</groupId>
+    <artifactId>nexus-plugin-api</artifactId>
+    <version>3.16.1-02</version>
+    <scope>provided</scope>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/io.takari.nexus/nexus-plugin-bundle-maven-plugin -->
+<dependency>
+    <groupId>io.takari.nexus</groupId>
+    <artifactId>nexus-plugin-bundle-maven-plugin</artifactId>
+    <version>1.10</version>
+</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/org.sonatype.nexus/nexus-plugin-bundle -->
+<dependency>
+    <groupId>org.sonatype.nexus</groupId>
+    <artifactId>nexus-plugin-bundle</artifactId>
+    <version>1.3</version>
+    <type>pom</type>
+</dependency>
+
+
+
+<!-- https://mvnrepository.com/artifact/org.sonatype.nexus/nexus-plugin-bundle-model -->
+<dependency>
+    <groupId>org.sonatype.nexus</groupId>
+    <artifactId>nexus-plugin-bundle-model</artifactId>
+    <version>1.3</version>
+</dependency>
+
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+
+
+        <dependency>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-plugin-api</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-core</artifactId>
+          <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-model</artifactId>
+          <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-artifact</artifactId>
+          <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven.plugin-tools</groupId>
+          <artifactId>maven-plugin-annotations</artifactId>
+          <version>3.6.0</version>
+          <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils -->
+<dependency>
+    <groupId>org.codehaus.plexus</groupId>
+    <artifactId>plexus-utils</artifactId>
+    <version>3.2.0</version>
+</dependency>
+
+        <dependency>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.1.1</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-api</artifactId>
+          <version>1.11.2</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-manager-plexus</artifactId>
+          <version>1.11.2</version>
+        </dependency>
+
+
+
+        <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-provider-gitexe</artifactId>
+          <version>1.11.2</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-provider-git-commons</artifactId>
+          <version>1.11.2</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-provider-hg</artifactId>
+          <version>1.11.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.sonatype.plexus/plexus-build-api -->
+        <dependency>
+            <groupId>org.sonatype.plexus</groupId>
+            <artifactId>plexus-build-api</artifactId>
+            <version>0.0.7</version>
+        </dependency>
+
+
+
+
+        <!-- https://mvnrepository.com/artifact/org.sonatype.sisu.litmus/litmus-testsupport -->
+        <dependency>
+            <groupId>org.sonatype.sisu.litmus</groupId>
+            <artifactId>litmus-testsupport</artifactId>
+            <version>1.9</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
+    <dependency>
+       <groupId>org.slf4j</groupId>
+       <artifactId>slf4j-api</artifactId>
+       <version>1.7.5</version>
+   </dependency>
+
+ <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+ <!--
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-log4j12</artifactId>
+    <version>1.7.26</version>
+    <scope>test</scope>
+</dependency>
+ -->
+ <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>1.7.26</version>
+    <scope>test</scope>
+</dependency>
+
+   <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+   <!--
+   		<dependency>
+		    <groupId>org.apache.kafka</groupId>
+		    <artifactId>kafka-clients</artifactId>
+		    <version>2.2.0</version>
+		</dependency>
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-log4j-appender</artifactId>
+        <version>0.10.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>net.logstash.log4j</groupId>
+        <artifactId>jsonevent-layout</artifactId>
+        <version>1.7</version>
+    </dependency>
+
+    <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.2</version>
+    </dependency>
+-->
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+    <!--
+		    <dependency>
+		        <groupId>org.apache.logging.log4j</groupId>
+		        <artifactId>log4j-api</artifactId>
+		        <version>${log.api.version}</version>
+		    </dependency>
+		    -->
+
+		    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		    <!--
+		    <dependency>
+		        <groupId>org.apache.logging.log4j</groupId>
+		        <artifactId>log4j-core</artifactId>
+		        <version>${log.api.version}</version>
+		    </dependency>
+
+        <dependency>
+            <groupId>com.github.danielwegener</groupId>
+            <artifactId>logback-kafka-appender</artifactId>
+            <version>0.2.0-RC1</version>
+            <scope>runtime</scope>
+        </dependency>
+        -->
+<!--
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+            <scope>runtime</scope>
+        </dependency>
+-->
+  </dependencies>
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+
+
+        <!-- ================================  -->
+        <!-- ======= Build job         =======  -->
+        <!-- ================================  -->
+
+        <plugin>
+          <groupId>org.talend</groupId>
+          <artifactId>ci.builder</artifactId>
+          <version>2.6.4</version>
+              <executions>
+                  <execution>
+                      <phase>generate-sources</phase>
+                      <goals>
+                          <!-- local(script) mode -->
+                          <goal>local-generate</goal>
+
+                          <!-- server mode -->
+                          <!--goal>generate</goal-->
+                      </goals>
+                      <configuration>
+                            <!-- Optional. Specify CommandLine user -->
+                            <commandlineUser>jobbuilder@talend.com</commandlineUser>
+                            <!-- Optional. Jvm Parameters for local(script) mode -->
+                            <!-- <jvmArguments>-ea -Xms512m -Xmx1300m -XX:
+  +CMSClassUnloadingEnabled -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+HeapDumpOnOutOfMemoryError</jvmArguments> -->
+
+                            <!-- Optional. Parameter used to filter on specific Job status (TEST, DEV, PROD, etc) -->
+                            <!-- <itemFilter>(status=TEST)or(status=PROD)or(status="")</itemFilter> -->
+                      </configuration>
+                  </execution>
+                </executions>
+          </plugin>
+
+<!--
+        <plugin>
+              <groupId>org.sonatype.plugins</groupId>
+              <artifactId>nexus-staging-maven-plugin</artifactId>
+              <version>1.6.8</version>
+              <executions>
+                 <execution>
+                    <id>talend-snapshots</id>
+                    <phase>deploy</phase>
+                    <goals>
+                       <goal>deploy</goal>
+                    </goals>
+                 </execution>
+              </executions>
+              <configuration>
+                 <serverId>nexus</serverId>
+                 <nexusUrl>http://vps40346.lws-hosting.com:8888/nexus</nexusUrl>
+
+                 <skipStaging>true</skipStaging>
+              </configuration>
+        </plugin>
+-->
+
+
+
+<!--
+        <plugin>
+            <artifactid>maven-dependency-plugin</artifactid>
+            <configuration>
+             <artifactitems>
+              <artifactitem>
+               <groupid>${artifact.groupId}</groupid>
+               <artifactid>${artifact.artifactId}</artifactid>
+               <version>${artifact.version}</version>
+               <type>${artifact.packaging}</type>
+               <destfilename>${artifact.fileName}</destfilename>
+              </artifactitem>
+             </artifactitems>
+            </configuration>
+           </plugin>
+-->
+
+<!--
+<plugin>
+    <artifactId>maven-deploy-plugin</artifactId>
+    <version>2.8.2</version>
+    <executions>
+        <execution>
+            <id>deploy-file</id>
+            <phase>deploy</phase>
+            <goals>
+                <goal>deploy-file</goal>
+            </goals>
+            <configuration>
+                <file>${project.build.directory}/${project.build.finalName}.jar</file>
+                <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots</url>
+                <groupId>com.speinnov.tools.monitoring</groupId>
+                <artifactId>${artifactId}</artifactId>
+                <version>${project.version}</version>
+                <packaging>${project.packaging}</packaging>
+                <repositoryId>${targetRepositoryID2}</repositoryId>
+                 <pomFile>logginmanager/pom.xml</pomFile>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+-->
+
+<!--
+<file>${project.build.directory}/${project.build.finalName}.jar</file>
+<groupId>${project.groupId}</groupId>
+<artifactId>${project.artifactId}</artifactId>
+<version>${project.version}</version>
+<packaging>${project.packaging}</packaging>
+<generatePom>true</generatePom>
+<repositoryId>${targetRepositoryID2}</repositoryId>
+< !- -url>${baseNexusURL}/content/repositories/${targetRepositoryID}</url- - >
+<url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/${targetRepositoryID}</url>
+<sources>${project.build.directory}/${project.build.finalName}-sources.jar</sources>
+< ! - - pomFile>pom.xml</pomFile- - >
+<groupId>com.speinnov.tools.monitoring</groupId>
+<artifactId>logginmanager</artifactId>
+<version>1.5-SNAPSHOT</version>
+<packaging>jar</packaging>
+<name>logginmanager</name>
+-->
+
+
+
+
+
+
+<!--
+           <plugin>
+             <artifactId>maven-deploy-plugin</artifactId>
+             <version>2.8.2</version>
+                <configuration>
+                      <skip>true</skip>
+                </configuration>
+                <executions>
+
+                       <execution>
+                          <id>default-deploy</id>
+                          <goals>
+                              <goal>deploy</goal>
+                          </goals>
+                          <phase>deploy</phase>
+
+                          <configuration>
+                            <skip>true</skip>
+                          </configuration>
+                       </execution>
+
+                       <execution>
+                            <id>deploy-node-modules-artifact</id>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                            <phase>deploy-file</phase>
+
+                            <configuration>
+              -->
+                              <!--
+                                 <repositoryid>${project.distributionManagementArtifactRepository.id}</repositoryid>
+
+                                 <file>${project.build.directory}/${project.build.finalName}-noauth.${project.packaging}</file>
+                                 <url>${project.distributionManagementArtifactRepository.url}</url>
+
+                                 <artifactid>${project.artifactId}-noauth</artifactid>
+                                 <groupid>${project.groupId}</groupid>
+                                 <version>${project.version}</version>
+                                 <packaging>${project.packaging}</packaging>
+                             -->
+   <!--
+                           <file>${project.build.directory}/${project.build.finalName}.jar</file>
+                           <groupId>${project.groupId}</groupId>
+                           <artifactId>${project.artifactId}</artifactId>
+                           <version>${project.version}</version>
+                           <packaging>${project.packaging}</packaging>
+                           <generatePom>true</generatePom>
+                           <repositoryId>${targetRepositoryID2}</repositoryId>
+                           <!- -url>${baseNexusURL}/content/repositories/${targetRepositoryID}</url - ->
+                           <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/${targetRepositoryID}</url>
+                           <sources>${project.build.directory}/${project.build.finalName}-sources.jar</sources>
+                           <!- -pomFile>pom.xml</pomFile- ->
+
+
+
+                            </configuration>
+                       </execution>
+               </executions>
+
+           </plugin>
+
+ -->
+
+
+           <plugin>
+             <artifactId>maven-deploy-plugin</artifactId>
+             <executions>
+               <execution>
+                 <id>deploy-file</id>
+                 <phase>deploy</phase>
+                 <goals>
+                   <goal>deploy-file</goal>
+                 </goals>
+                 <configuration>
+                   <file>${project.build.directory}/${project.artifactId}-${project.version}.zip</file>
+                   <repositoryId>${project.distributionManagement.snapshotRepository.id}</repositoryId>
+                   <url>${project.distributionManagement.snapshotRepository.url}</url>
+                   <groupId>${project.groupId}</groupId>
+                   <artifactId>${project.artifactId}</artifactId>
+                   <version>${project.version}</version>
+                   <packaging>zip</packaging>
+                 </configuration>
+               </execution>
+             </executions>
+           </plugin>
+
+
+
+
+
+<!--
+           <plugin>
+            <artifactid>maven-war-plugin</artifactid>
+            <configuration>
+             <classifier>noauth</classifier>
+            </configuration>
+           </plugin>
+-->
+
+
+              <plugin>
+                   <groupId>org.apache.maven.plugins</groupId>
+                   <artifactId>maven-release-plugin</artifactId>
+                   <version>2.5.3</version>
+                   <configuration>
+                     <localCheckout>true</localCheckout>
+                     <pushChanges>false</pushChanges>
+                       <!--tagBase>https://github.com/speinnov/logmonitoring.git</tagBase>
+                       <releaseProfiles>release</releaseProfiles-->
+                   </configuration>
+               </plugin>
+
+      </plugins>
+    </pluginManagement>
+    <!--finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName-->
+      <finalName>${project.artifactId}-${project.version}</finalName>
+  </build>
+
+  <!--connection>scm:git:http://${GIT_USERNAME}:${GIT_PASSWORD}@server.host.name/path/to/project.git</connection-->
+
+
+
+  <scm>
+      <connection>scm:git:git://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/speinnov/logmonitoring.git</connection>
+      <!--developerConnection>
+           scm:git:https://github.com/speinnov/logmonitoring.git
+      </developerConnection
+      <developerConnection>scm:git:ssh://git@github.com/sonatype/nexus-plugin-bundle.git</developerConnection>
+
+    -->
+      <url>https://github.com/speinnov/logmonitoring</url>
+      <tag>HEAD</tag>
+    <!--developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection-->
+  </scm>
+
+  <!--
+      <profiles>
+      <profile>
+        <id>test</id>
+        <activation>...</activation>
+        <build>...</build>
+        <modules>...</modules>
+        <repositories>...</repositories>
+        <pluginRepositories>...</pluginRepositories>
+        <dependencies>...</dependencies>
+        <reporting>...</reporting>
+        <dependencyManagement>...</dependencyManagement>
+        <distributionManagement>...</distributionManagement>
+      </profile>
+    </profiles>
+  -->
+
+
+<!-- *******************************************-->
+<!-- **************   NEXUS ********************-->
+<!-- *******************************************-->
+
+
+<!--
+  <profiles>
+              <profile>
+                  <id>vps40346</id>
+
+                      <distributionManagement>
+            	          	<repository>
+            	          		<id>talend-releases</id>
+            	          		<name>talend-releases</name>
+            	          		<url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_releases</url>
+            	          	</repository>
+            	          	<snapshotRepository>
+            	          		<id>talend-snapshots</id>
+            	          		<name>talend-snapshots</name>
+            	          		<url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots</url>
+            	          	</snapshotRepository>
+  	                     </distributionManagement>
+
+              </profile>
+    </profiles>
+-->
+    <distributionManagement>
+      <snapshotRepository>
+        <id>talend-snapshots</id>
+        <name>Snapshots repository (snapshots)</name>
+        <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots</url>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+      </snapshotRepository>
+    </distributionManagement>
+
+
+
+
+<!--
+  <distributionManagement>
+      <repository>
+          <id>nexus-site</id>
+          <url>http://vps40346.lws-hosting.com:8888/nexus/</url>
+      </repository>
+-->
+      <!--
+      <downloadUrl>http://mojo.codehaus.org/my-project</downloadUrl>
+      <status>deployed</status>
+
+      <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>corp1</id>
+      <name>Corporate Repository</name>
+      <url>scp://repo/maven2</url>
+      <layout>default</layout>ls /
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>true</uniqueVersion>
+      <id>propSnap</id>
+      <name>Propellors Snapshots</name>
+      <url>sftp://propellers.net/maven</url>
+      <layout>legacy</layout>
+    </snapshotRepository>
+
+    <site>
+      <id>mojo.website</id>
+      <name>Mojo Website</name>
+      <url>scp://beaver.codehaus.org/home/projects/mojo/public_html/</url>
+    </site>
+
+    <relocation>
+      <groupId>org.apache</groupId>
+      <artifactId>my-project</artifactId>
+      <version>1.0</version>
+      <message>We have moved the Project under Apache</message>
+    </relocation>
+
+    </distributionManagement>
+      -->
+
+       <!--
+  <repositories>
+
+       <repository>
+           <id>org.source.repo</id>
+           <name>Public online Restlet repository</name>
+           <url>http://repo.maven.apache.org/maven2/</url>
+       </repository>
+
+       <repository>
+           <id>talend_ci_builder</id>
+           <name>talend ci builder</name>
+           <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/thirdparty/</url>
+       </repository>
+
+       <repository>
+          <id>codehausSnapshots</id>
+          <name>Codehaus Snapshots</name>
+          <releases>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
+          <url>http://snapshots.maven.codehaus.org/maven2</url>
+          <layout>default</layout>
+        </repository>
+-->
+<!--
+        <repository>
+          <id>talend-releases</id>
+          <name>talend_releases</name>
+          <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_releases/</url>
+           <layout>default</layout>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+        </repository>
+      -->
+      <!--
+      <snapshotRepository />
+        <repository>
+
+          <id>talend-snapshots</id>
+          <name>talend_snapshots</name>
+          <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots/</url>
+           <layout>default</layout>
+                <releases>
+                    <enabled>false</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+        </repository>
+        <snapshotRepository />
+
+
+
+        <repository>
+          <releases>
+
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
+
+          <id>codehausSnapshots</id>
+          <name>Codehaus Snapshots</name>
+          <url>http://snapshots.maven.codehaus.org/maven2</url>
+          <layout>default</layout>
+        </repository>
+
+        <repository>
+          <releases>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
+
+          <id>talend-snapshots</id>
+          <name>talend_snapshots</name>
+          <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/talend_snapshots/</url>
+           <layout>default</layout>
+        </repository>
+
+      </repositories>
+      -->
+  <pluginRepositories>
+
+    <!-- everything through Maven Central Proxy -->
+      <pluginRepository>
+            <id>central</id>
+            <name>Central</name>
+            <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/central</url>
+      </pluginRepository>
+      <pluginRepository>
+            <id>thirdparty</id>
+            <name>thirdparty</name>
+            <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/thirdparty/</url>
+      </pluginRepository>
+
+
+  </pluginRepositories>
+
+
+ 
+
+
+
+</project>
