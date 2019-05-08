@@ -272,6 +272,9 @@ under the License.
    | server for that repository.
    |-->
 
+
+
+
   <mirrors>
     <!-- mirror
      | Specifies a repository mirror site to use instead of a given repository. The repository that
@@ -293,6 +296,21 @@ under the License.
                 <! - - CHANGE HERE by your team own nexus server - ->
                 <url>http://vps40346.lws-hosting.com:8888/nexus</url>
               </mirror>
+-->
+<!--
+<mirror>
+    <id>public</id>
+    <name>internal nexus mirror pf central </name>
+    <url>http://vps40346.lws-hosting.com:8888/nexus/content/groups/public/</url>
+    <mirrorOf>*</mirrorOf>
+</mirror>
+
+<mirror>
+    <id>thirdparty</id>
+    <name>internal nexus mirror pf central </name>
+    <url>http://vps40346.lws-hosting.com:8888/nexus/content/repositories/thirdparty/</url>
+    <mirrorOf>*</mirrorOf>
+</mirror>
 -->
   </mirrors>
 
