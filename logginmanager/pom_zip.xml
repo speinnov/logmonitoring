@@ -573,7 +573,7 @@
                         <tagNameFormat></tagNameFormat>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagBase>https://github.com/speinnov/logmonitoring.git</tagBase>
-                        <releaseProfiles>releases</releaseProfiles>
+                        <releaseProfiles>talendNexusArtifacts</releaseProfiles>
                    </configuration>
                </plugin>
 
@@ -592,9 +592,10 @@
       <!--developerConnection>
            scm:git:https://github.com/speinnov/logmonitoring.git
       </developerConnection
-      <developerConnection>scm:git:ssh://git@github.com/sonatype/nexus-plugin-bundle.git</developerConnection>
-
     -->
+      <developerConnection>scm:git:ssh://hadoop@github.com/speinnov/logmonitoring.git</developerConnection>
+
+
       <url>https://github.com/speinnov/logmonitoring</url>
       <tag>HEAD</tag>
     <!--developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection-->
