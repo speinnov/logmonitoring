@@ -11,7 +11,7 @@
 -->
   <groupId>com.speinnov.tools.monitoring</groupId>
   <artifactId>logginmanager</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.8</version>
   <packaging>jar</packaging>
   <name>logginmanager</name>
   <!-- FIXME change it to the project's website -->
@@ -570,7 +570,7 @@
                    <configuration>
                         <localCheckout>true</localCheckout>
                         <pushChanges>false</pushChanges>
-                        <tagNameFormat></tagNameFormat>
+                        <tagNameFormat />
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagBase>https://github.com/speinnov/logmonitoring.git</tagBase>
                         <releaseProfiles>talendNexusArtifacts</releaseProfiles>
@@ -591,13 +591,12 @@
       <connection>scm:git:git://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/speinnov/logmonitoring.git</connection>
       <!--developerConnection>
            scm:git:https://github.com/speinnov/logmonitoring.git
-      </developerConnection
-    -->
+      </developerConnection -->
       <developerConnection>scm:git:ssh://hadoop@github.com/speinnov/logmonitoring.git</developerConnection>
 
 
       <url>https://github.com/speinnov/logmonitoring</url>
-      <tag>HEAD</tag>
+      <tag>logginmanager-1.8</tag>
     <!--developerConnection>scm:git:https://github.com/speinnov/logmonitoring/tree/master/logginmanager</developerConnection-->
   </scm>
 
